@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Kindergarten Photo Studio</title>
+    <meta name="description" content="Kreş ve anaokulu fotoğrafçılığı hakkında faydalı bilgiler, ipuçları ve trend blog yazıları.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .blog-header { padding: 180px 0 60px 0; text-align: center; }
+        .blog-header h1 { font-size: 56px; margin-bottom: 20px; }
+        .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 80px; }
+        
+        .blog-card { background: #fff; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid #eee; transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; }
+        .blog-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.05); border-color: var(--bento-blue); }
+        .bc-img { width: 100%; height: 220px; background: var(--bento-yellow); object-fit: cover; }
+        .bc-content { padding: 30px; display: flex; flex-direction: column; flex-grow: 1; }
+        .bc-tag { font-size: 13px; font-weight: 700; color: var(--bento-red); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;}
+        .bc-content h3 { font-size: 24px; margin-bottom: 16px; font-family: 'Playfair Display', serif; }
+        .bc-content p { color: var(--text-light); margin-bottom: 24px; flex-grow: 1; }
+        .bc-read { color: var(--text-dark); font-weight: 700; display: inline-flex; align-items: center; gap: 8px; font-size: 15px; }
+        .bc-read:hover { color: var(--bento-blue); }
+    </style>
+</head>
+<body>
+    
+    <!-- NAVBAR -->
+    <nav id="nav">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.webp" style="height:80px; margin-right:8px;"> 
+            </a>
+            <div class="nav-links">
+                <a href="index.html#about">Hakkımızda</a>
+                <a href="index.html#products">Baskı Hizmetleri</a>
+                <a href="blog.html" style="color: var(--bento-red);">Blog</a>
+                <a href="index.html#video">Tanıtım</a>
+                <a href="index.html#gallery">Galeri</a>
+            </div>
+            <a href="index.html#contact" class="btn-main nav-cta-btn">Fiyat Teklifi Alın</a>
+            <button class="ham" id="hamBtn" aria-label="Menüyü Aç">☰</button>
+        </div>
+    </nav>
+    
+    <!-- MOBILE MENU -->
+    <div class="mob-overlay" id="mobOverlay"></div>
+    <div class="mob-menu" id="mobMenu">
+        <button class="close-mob" id="closeMobBtn" aria-label="Menüyü Kapat">&times;</button>
+        <a href="index.html#about" class="mob-link">Hakkımızda</a>
+        <a href="index.html#products" class="mob-link">Baskı Hizmetleri</a>
+        <a href="blog.html" class="mob-link" style="color: var(--bento-red);">Blog</a>
+        <a href="index.html#video" class="mob-link">Tanıtım</a>
+        <a href="index.html#gallery" class="mob-link">Galeri</a>
+        <a href="index.html#contact" class="btn-main mob-link" style="text-align: center;">Teklif Al</a>
+    </div>
+
+    <!-- HEADER -->
+    <section class="blog-header">
+        <div class="container reveal">
+            <span class="pill-tag">BİLGİ KAYNAĞI</span>
+            <h1>Stüdyo Blog</h1>
+            <p style="font-size: 18px; color: var(--text-light); max-width: 600px; margin: 0 auto;">Fotoğraf çekimlerinden okul tanıtım trendlerine kadar merak ettiğiniz her şey.</p>
+        </div>
+    </section>
+
+    <!-- GRID SECTION -->
+    <section class="section" style="padding-top:0;">
+        <div class="container">
+            <div class="blog-grid">
+                <!-- 1 -->
+                <a href="seo-blog-1.html" class="blog-card reveal">
+                    <img src="assets/galeri_03.webp" class="bc-img" alt="Blog 1">
+                    <div class="bc-content">
+                        <div class="bc-tag">KONSEPT ÇEKİM</div>
+                        <h3>Anaokulu ve Kreş Çekimlerinde Dikkat Edilmesi Gereken Yöntemler</h3>
+                        <p>Küçük çocuklarla çalışırken doğallığı yakalamanın ve stresi önlemenin pedagojik ipuçları nelerdir?</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+                
+                <!-- 2 -->
+                <a href="seo-blog-2.html" class="blog-card reveal delay-1">
+                    <img src="assets/galeri_02.webp" class="bc-img" alt="Blog 2">
+                    <div class="bc-content">
+                        <div class="bc-tag">MEZUNİYET</div>
+                        <h3>Mezuniyet Fotoğrafları Neden Profesyonel Olmalı?</h3>
+                        <p>Kep atma törenlerinde cep telefonu kameralarının yetersiz kaldığı durumlar ve albümlemenin önemi.</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+                
+                <!-- 3 -->
+                <a href="seo-blog-3.html" class="blog-card reveal delay-2">
+                    <img src="assets/galeri_04.webp" class="bc-img" alt="Blog 3">
+                    <div class="bc-content">
+                        <div class="bc-tag">VİDEO & REKLAM</div>
+                        <h3>Kreş Tanıtım Filmi Velileri Nasıl İkna Eder?</h3>
+                        <p>Sosyal medya reklamlarında okulları rakiplerinden öne çıkaran drone ve modern video teknikleri.</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+
+                <!-- 4 -->
+                <a href="seo-blog-4.html" class="blog-card reveal">
+                    <img src="assets/galeri_01.webp" class="bc-img" alt="Blog 4">
+                    <div class="bc-content">
+                        <div class="bc-tag">ETKİNLİK ÇEKİMİ</div>
+                        <h3>23 Nisan ve Resmi Bayram Gösterileri İçin Fotoğraf Çekim Rehberi</h3>
+                        <p>23 Nisan kreş gösterisi ve resmi bayram okulu etkinliklerinde profesyonel fotoğraf çekimi planlaması.</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+                
+                <!-- 5 -->
+                <a href="seo-blog-5.html" class="blog-card reveal delay-1">
+                    <img src="assets/TRK04859.webp" class="bc-img" alt="Blog 5">
+                    <div class="bc-content">
+                        <div class="bc-tag">YILLIK TASARIMI</div>
+                        <h3>Kreş Yıllığı: Öğretmenler ve Aileler Arasında Kurulan Altın Köprü</h3>
+                        <p>Anaokulu yıllığı ve mezuniyet tasarımı. Bir kreşin marka değerini artıran en önemli basılı hatıralar.</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+
+                <!-- 6 -->
+                <a href="seo-blog-6.html" class="blog-card reveal delay-2">
+                    <img src="assets/TRK08389.webp" class="bc-img" alt="Blog 6">
+                    <div class="bc-content">
+                        <div class="bc-tag">B2B STRATEJİ</div>
+                        <h3>Okul Öncesi Erken Kayıtları Artıracak Dijital Fotoğrafçılık Stratejileri</h3>
+                        <p>Kreş pazarlaması, anaokulu öğrenci kontenjanlarını artırma ve dijital sosyal medya taktikleri.</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+
+                <!-- 7 -->
+                <a href="seo-blog-7.html" class="blog-card reveal">
+                    <img src="assets/TRK08551.webp" class="bc-img" alt="Blog 7">
+                    <div class="bc-content">
+                        <div class="bc-tag">PSİKOLOJİK YAKLAŞIM</div>
+                        <h3>Çocuklarda Kamera Korkusu (Lens Şoklaması) Nasıl Yenilir?</h3>
+                        <p>Bebek ve çocuk fotoğrafçısı ipuçları, utangaç çocukları çekime dahil etmek için pedagog yaklaşımları.</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+
+                <!-- 8 -->
+                <a href="seo-blog-8.html" class="blog-card reveal delay-1">
+                    <img src="assets/galeri_05.webp" class="bc-img" alt="Blog 8">
+                    <div class="bc-content">
+                        <div class="bc-tag">KARŞILAŞTIRMA</div>
+                        <h3>Sınıf İçi Doğal Çekim vs Kurgusal Stüdyo Çekimi</h3>
+                        <p>Okul içinde belgesel tadında doğal çekimler mi yoksa fon perdeli kurgusal fotoğrafçılık mı?</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+
+                <!-- 9 -->
+                <a href="seo-blog-9.html" class="blog-card reveal delay-2">
+                    <img src="assets/galeri_06.webp" class="bc-img" alt="Blog 9">
+                    <div class="bc-content">
+                        <div class="bc-tag">VESİKALIK</div>
+                        <h3>E-Okul Kayıtları İçin Kusursuz ve Güvenli Vesikalık Süreçleri</h3>
+                        <p>E-okul biyometrik vesikalık standartları, öğrenci kayıt fotoğrafı koşulları ve profesyonel hizmetler.</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+
+                <!-- 10 -->
+                <a href="seo-blog-10.html" class="blog-card reveal">
+                    <img src="assets/paket_full.webp" class="bc-img" alt="Blog 10">
+                    <div class="bc-content">
+                        <div class="bc-tag">GÜVENLİK & KVKK</div>
+                        <h3>Çocuk Fotoğrafçılığında Sosyal Medya Mahremiyeti ve KVKK Kuralları</h3>
+                        <p>Kreş fotoğraflarını sosyal medyada paylaşırken dikkat edilmesi gereken gizlilik kuralları.</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+
+                <!-- 11 -->
+                <a href="seo-blog-11.html" class="blog-card reveal delay-1">
+                    <img src="assets/paket_album.webp" class="bc-img" alt="Blog 11">
+                    <div class="bc-content">
+                        <div class="bc-tag">DRONE & VİDEO</div>
+                        <h3>Drone Çekimi: Okul Bahçesi ve Fiziksel Kapasiteyi Göstermenin Gücü</h3>
+                        <p>Kreş drone çekimi, anaokulu bahçesi havadan tanıtımı ve özelliklerini velilere sunma.</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+
+                <!-- 12 -->
+                <a href="seo-blog-12.html" class="blog-card reveal delay-2">
+                    <img src="assets/paket_dijital.webp" class="bc-img" alt="Blog 12">
+                    <div class="bc-content">
+                        <div class="bc-tag">KAMPANYA & FİYAT</div>
+                        <h3>Kardeş İndirimi ve Toplu Çekimlerde Anaokulu Kampanyaları</h3>
+                        <p>Kreş fotoğraf çekimi fiyatları, toplu anaokulu paketleri ve indirim kampanyaları.</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+
+                <!-- 13 -->
+                <a href="seo-blog-13.html" class="blog-card reveal">
+                    <img src="assets/urun_kanvas.webp" class="bc-img" alt="Blog 13">
+                    <div class="bc-content">
+                        <div class="bc-tag">EKOLOJİK ÜRÜNLER</div>
+                        <h3>Ekolojik Çocuk Albümleri: Doğa Dostu Akordion Baskı Malzemeleri</h3>
+                        <p>Çevre dostu kağıt malzeme, akordion albüm ve geri dönüştürülmüş baskı çerçeveleri.</p>
+                        <span class="bc-read">Devamını Oku ➔</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px; color: #fff;">Kindergarten Photo Studio</h2>
+            <p>© 2026 Tüm Hakları Saklıdır · Ümraniye, İstanbul</p>
+        </div>
+    </footer>
+
+    <!-- EXTERNAL JS -->
+    <script src="script.js"></script>
+</body>
+</html>
