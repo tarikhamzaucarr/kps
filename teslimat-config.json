@@ -1,0 +1,24 @@
+{
+  "schools": [
+    {
+      "slug": "demo-okul",
+      "name": "Demo Anaokulu",
+      "veliPin": "1234",
+      "adminPin": "admin2026",
+      "basePath": "demo-okul/",
+      "children": [
+        {
+          "id": "child-1",
+          "name": "Test 1",
+          "pin": "0001",
+          "folder": "test1",
+          "photos": [
+            { "id": "IMG_001", "thumb": "originals/test1/galeri_01.jpg", "original": "originals/test1/galeri_01.jpg" },
+            { "id": "IMG_002", "thumb": "originals/test1/galeri_02.jpg", "original": "originals/test1/galeri_02.jpg" },
+            { "id": "IMG_003", "thumb": "originals/test1/galeri_03.jpg", "original": "originals/test1/galeri_03.jpg" }
+          ]
+        }
+      ]
+    }
+  ]
+}

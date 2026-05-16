@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dijital Teslimat | Kindergarten Photo Studio</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#fcfaf5">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+
+    <!-- GLightbox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="teslimat.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav id="nav">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.webp" style="height:80px; margin-right:8px;" alt="Logo">
+            </a>
+            <div class="nav-links">
+                <a href="index.html#about">Hakkımızda</a>
+                <a href="index.html#products">Baskı Hizmetleri</a>
+                <a href="teslimat.html" style="color:var(--bento-red);font-weight:700;">Dijital Teslimat</a>
+                <a href="index.html#contact" class="btn-main nav-cta-btn">İletişim</a>
+            </div>
+            <button class="ham" id="hamBtn" aria-label="Menüyü Aç">☰</button>
+        </div>
+    </nav>
+
+    <div class="mob-overlay" id="mobOverlay"></div>
+    <div class="mob-menu" id="mobMenu">
+        <button class="close-mob" id="closeMobBtn" aria-label="Menüyü Kapat">&times;</button>
+        <a href="index.html#about" class="mob-link">Hakkımızda</a>
+        <a href="index.html#products" class="mob-link">Baskı Hizmetleri</a>
+        <a href="teslimat.html" class="mob-link" style="color:var(--bento-red);">Dijital Teslimat</a>
+        <a href="index.html#contact" class="btn-main mob-link" style="text-align:center;">İletişim</a>
+    </div>
+
+    <!-- ═══════════ AUTH GATE ═══════════ -->
+    <div id="teslimatAuth" class="teslimat-auth">
+        <div class="auth-box">
+            <h2 id="authSchoolName">Dijital Teslimat</h2>
+            <p class="auth-subtitle">Fotoğraflara erişmek için giriş yapın.</p>
+
+            <!-- Role Selector -->
+            <div class="role-selector">
+                <div class="role-card active" data-role="veli">
+                    <span class="role-icon">👨‍👩‍👧</span>
+                    <span class="role-label">Veli Girişi</span>
+                    <span class="role-desc">Çocuğunuzun fotoğrafları</span>
+                </div>
+                <div class="role-card" data-role="admin">
+                    <span class="role-icon">🛡️</span>
+                    <span class="role-label">Admin Girişi</span>
+                    <span class="role-desc">Yönetim paneli</span>
+                </div>
+            </div>
+
+            <!-- Auth Form -->
+            <div class="auth-form">
+                <input type="password" id="authPinInput" class="auth-input" maxlength="4" placeholder="••••" autocomplete="off">
+                <input type="password" id="authPassInput" class="auth-input password-input" placeholder="Admin şifresi" autocomplete="off" style="display:none;">
+                <div id="authError" class="auth-error">Hatalı bilgi</div>
+                <button id="authSubmitBtn" class="btn-main" style="width:100%;font-size:16px;padding:15px;">Giriş Yap</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ MAIN CONTENT ═══════════ -->
+    <main id="teslimatMain" class="teslimat-main hidden">
+        <div class="container">
+
+            <!-- Breadcrumb -->
+            <div class="teslimat-breadcrumb" id="breadcrumb"></div>
+
+            <!-- ── FOLDER VIEW (Veli) ── -->
+            <div id="folderViewPanel" class="view-panel">
+                <div class="folder-header">
+                    <div>
+                        <h1 id="folderSchoolName">Klasörler</h1>
+                        <p id="folderChildCount">0 öğrenci</p>
+                    </div>
+                </div>
+                <div class="folder-grid" id="folderGrid">
+                    <!-- Folders injected by JS -->
+                </div>
+            </div>
+
+            <!-- ── PHOTO VIEW ── -->
+            <div id="photoViewPanel" class="view-panel">
+                <div class="photos-toolbar" id="photosToolbar"></div>
+                <div class="photo-grid-t" id="photoGridT">
+                    <!-- Photos injected by JS -->
+                </div>
+            </div>
+
+            <!-- ── ADMIN VIEW ── -->
+            <div id="adminViewPanel" class="view-panel">
+                <div id="adminContent">
+                    <!-- Admin panel injected by JS -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ═══════════ CHILD PIN MODAL ═══════════ -->
+    <div id="childPinOverlay" class="child-pin-overlay hidden">
+        <div class="child-pin-card">
+            <button id="childPinClose" class="child-pin-close">&times;</button>
+            <h3 id="childPinName">Klasör Adı</h3>
+            <p class="child-pin-subtitle">Bu klasöre erişmek için 4 haneli PIN kodunu girin.</p>
+            <input type="password" id="childPinInput" maxlength="4" placeholder="••••" autocomplete="off">
+            <div id="childPinError" class="pin-error">Hatalı PIN, lütfen tekrar deneyin.</div>
+            <button id="childPinSubmit" class="btn-main" style="width:100%;font-size:15px;padding:14px;">Giriş Yap</button>
+        </div>
+    </div>
+
+    <!-- ═══════════ RENAME MODAL (Admin) ═══════════ -->
+    <div id="renameOverlay" class="rename-overlay hidden">
+        <div class="rename-card">
+            <h3>Klasör Adını Düzenle</h3>
+            <input type="text" id="renameInput" placeholder="Yeni isim girin">
+            <div class="rename-actions">
+                <button id="renameCancelBtn" class="btn-ghost" style="font-size:13px;padding:8px 18px;">İptal</button>
+                <button id="renameSaveBtn" class="btn-action" style="font-size:13px;">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ ORDER MODAL ═══════════ -->
+    <div id="orderOverlay" class="order-modal hidden">
+        <div class="modal-content">
+            <button id="orderCloseBtn" class="close-modal">&times;</button>
+            <h3>Sipariş Ver</h3>
+            <div class="order-summary" id="orderSummary"></div>
+            <form id="orderForm" action="https://formspree.io/f/xvzvlqjg" method="POST">
+                <input type="hidden" name="_subject" value="[SİPARİŞ] Dijital Teslimat">
+                <div class="fg">
+                    <label>Adınız Soyadınız</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="fg">
+                    <label>Telefon Numaranız</label>
+                    <input type="tel" name="phone" required>
+                </div>
+                <div class="fg">
+                    <label>Notlarınız (baskı türü, adet vb.)</label>
+                    <textarea name="notes" rows="3" placeholder="Örn: 3 adet 10x15 baskı, 1 kanvas tablo..."></textarea>
+                </div>
+                <div class="fg">
+                    <label>Ödeme Yöntemi</label>
+                    <select name="payment" required>
+                        <option value="Havale/EFT">Havale/EFT</option>
+                        <option value="Kapıda Ödeme">Kapıda Ödeme</option>
+                    </select>
+                </div>
+                <p class="checkout-note">* Sipariş detayları ve ödeme bilgileri WhatsApp üzerinden iletilecektir.</p>
+                <button type="submit" class="btn-main" style="width:100%;margin-top:15px;">Siparişi Gönder 🚀</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ═══════════ PASSWORD CHANGE MODALS ═══════════ -->
+    <!-- ═══════════ PASSWORD CHANGE MODALS ═══════════ -->
+    <div id="generalPinOverlay" class="rename-overlay hidden">
+        <div class="rename-card" style="width:360px;">
+            <h3>Genel Şifreleri Düzenle</h3>
+            <p style="color:var(--text-light);font-size:14px;margin-bottom:20px;">Veli ve Admin giriş şifrelerini değiştirin.</p>
+            
+            <div style="margin-bottom:15px;text-align:left;">
+                <label style="display:block;margin-bottom:5px;font-weight:600;font-size:14px;">Yeni Veli Şifresi (PIN)</label>
+                <input type="text" id="newVeliPinInput" style="letter-spacing:normal;font-size:16px;width:100%;padding:10px;border:1px solid var(--border-color);border-radius:var(--radius-sm);" placeholder="Örn: 1234">
+            </div>
+            
+            <div style="margin-bottom:25px;text-align:left;">
+                <label style="display:block;margin-bottom:5px;font-weight:600;font-size:14px;">Yeni Admin Şifresi</label>
+                <input type="text" id="newAdminPinInput" style="letter-spacing:normal;font-size:16px;width:100%;padding:10px;border:1px solid var(--border-color);border-radius:var(--radius-sm);" placeholder="Örn: admin2026">
+            </div>
+
+            <div class="rename-actions">
+                <button id="generalPinCancelBtn" class="btn-ghost" style="font-size:13px;padding:8px 18px;">İptal</button>
+                <button id="generalPinSaveBtn" class="btn-action" style="font-size:13px;">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pinChangeOverlay" class="rename-overlay hidden">
+        <div class="rename-card">
+            <h3>Klasör Şifresi Değiştir</h3>
+            <p id="pinChangeFolderName" style="color:var(--text-light);font-size:14px;margin-bottom:20px;"></p>
+            
+            <div style="margin-bottom:25px;text-align:left;">
+                <label style="display:block;margin-bottom:5px;font-weight:600;font-size:14px;">Yeni Klasör Şifresi (PIN)</label>
+                <input type="text" id="newFolderPinInput" style="letter-spacing:normal;font-size:16px;width:100%;padding:10px;border:1px solid var(--border-color);border-radius:var(--radius-sm);" placeholder="4 haneli PIN girin">
+            </div>
+
+            <div class="rename-actions">
+                <button id="pinChangeCancelBtn" class="btn-ghost" style="font-size:13px;padding:8px 18px;">İptal</button>
+                <button id="pinChangeSaveBtn" class="btn-action" style="font-size:13px;">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ DOWNLOAD OVERLAY ═══════════ -->
+    <div id="dlOverlay" class="dl-overlay hidden">
+        <div class="dl-box">
+            <h3>Fotoğraflar İndiriliyor</h3>
+            <p>Lütfen bekleyin, <span id="dlStatus">0/0</span></p>
+            <div class="dl-progress-container">
+                <div id="dlProgressFill" class="dl-progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ SUCCESS MODAL ═══════════ -->
+    <div id="successOverlay" class="success-overlay hidden">
+        <div class="modal-content" style="text-align:center;padding:40px 20px;max-width:420px;background:#fff;border-radius:var(--radius-lg);">
+            <div style="color:var(--bento-green);margin-bottom:20px;">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h3 style="margin-bottom:15px;">Siparişiniz Alındı!</h3>
+            <p style="color:var(--text-light);margin-bottom:20px;">Bizi tercih ettiğiniz için teşekkür ederiz. En kısa sürede sizinle iletişime geçeceğiz.</p>
+            <button id="successCloseBtn" class="btn-main">Galeriye Dön</button>
+        </div>
+    </div>
+
+    <!-- ═══════════ TOAST CONTAINER ═══════════ -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- FOOTER -->
+    <footer class="footer" style="margin-top:60px;">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo" style="color:#fff;margin-bottom:16px;">
+                        <img src="assets/logo.webp" style="height:80px;margin-right:8px;" alt="Logo"> Kindergarten Photo Studio
+                    </div>
+                    <p>Minik gülümsemeleri ölümsüzleştiriyoruz. İstanbul'un en güvenilir kreş ve anaokulu fotoğraf stüdyosu.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>İletişim</h4>
+                    <ul>
+                        <li><a href="tel:+905369741405">📞 +90 536 974 14 05</a></li>
+                        <li><a href="mailto:kindergartenphotostudio@gmail.com">📧 kindergartenphotostudio@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Kindergarten Photo Studio · Tüm Hakları Saklıdır</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="teslimat.js"></script>
+
+    <script>
+        // Mobile menu handler
+        document.getElementById('hamBtn').addEventListener('click', () => {
+            document.getElementById('mobMenu').classList.add('open');
+            document.getElementById('mobOverlay').classList.add('open');
+        });
+        document.getElementById('closeMobBtn').addEventListener('click', () => {
+            document.getElementById('mobMenu').classList.remove('open');
+            document.getElementById('mobOverlay').classList.remove('open');
+        });
+        document.getElementById('mobOverlay').addEventListener('click', () => {
+            document.getElementById('mobMenu').classList.remove('open');
+            document.getElementById('mobOverlay').classList.remove('open');
+        });
+    </script>
+</body>
+</html>
