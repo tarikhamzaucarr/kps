@@ -12,21 +12,166 @@
     const INLINE_CONFIG = {
         "schools": [
                 {
-                        "slug": "test-okulu",
-                        "name": "Test Okulu",
+                        "slug": "nicekindergarten",
+                        "name": "Nicekindergarten",
                         "veliPin": "1234",
                         "adminPin": "admin2026",
-                        "basePath": "test-okulu/",
+                        "basePath": "nicekindergarten/",
                         "photos": [
                                 {
                                         "id": "IMG_0001",
-                                        "thumb": "thumbs/IMG_001.webp",
-                                        "original": "originals/IMG_001.jpg"
+                                        "thumb": "thumbs/DSC03357.webp",
+                                        "original": "originals/DSC03357.JPG"
                                 },
                                 {
                                         "id": "IMG_0002",
-                                        "thumb": "thumbs/IMG_002.webp",
-                                        "original": "originals/IMG_002.jpg"
+                                        "thumb": "thumbs/DSC03359.webp",
+                                        "original": "originals/DSC03359.JPG"
+                                },
+                                {
+                                        "id": "IMG_0003",
+                                        "thumb": "thumbs/DSC03361.webp",
+                                        "original": "originals/DSC03361.JPG"
+                                },
+                                {
+                                        "id": "IMG_0004",
+                                        "thumb": "thumbs/DSC03363.webp",
+                                        "original": "originals/DSC03363.JPG"
+                                },
+                                {
+                                        "id": "IMG_0005",
+                                        "thumb": "thumbs/DSC03367.webp",
+                                        "original": "originals/DSC03367.JPG"
+                                },
+                                {
+                                        "id": "IMG_0006",
+                                        "thumb": "thumbs/DSC03373.webp",
+                                        "original": "originals/DSC03373.JPG"
+                                },
+                                {
+                                        "id": "IMG_0007",
+                                        "thumb": "thumbs/DSC03374.webp",
+                                        "original": "originals/DSC03374.JPG"
+                                },
+                                {
+                                        "id": "IMG_0008",
+                                        "thumb": "thumbs/DSC03379.webp",
+                                        "original": "originals/DSC03379.JPG"
+                                },
+                                {
+                                        "id": "IMG_0009",
+                                        "thumb": "thumbs/DSC03384.webp",
+                                        "original": "originals/DSC03384.JPG"
+                                },
+                                {
+                                        "id": "IMG_0010",
+                                        "thumb": "thumbs/DSC03389.webp",
+                                        "original": "originals/DSC03389.JPG"
+                                },
+                                {
+                                        "id": "IMG_0011",
+                                        "thumb": "thumbs/DSC03392.webp",
+                                        "original": "originals/DSC03392.JPG"
+                                },
+                                {
+                                        "id": "IMG_0012",
+                                        "thumb": "thumbs/DSC03398.webp",
+                                        "original": "originals/DSC03398.JPG"
+                                },
+                                {
+                                        "id": "IMG_0013",
+                                        "thumb": "thumbs/DSC03401.webp",
+                                        "original": "originals/DSC03401.JPG"
+                                },
+                                {
+                                        "id": "IMG_0014",
+                                        "thumb": "thumbs/DSC03407.webp",
+                                        "original": "originals/DSC03407.JPG"
+                                },
+                                {
+                                        "id": "IMG_0015",
+                                        "thumb": "thumbs/DSC03435.webp",
+                                        "original": "originals/DSC03435.JPG"
+                                },
+                                {
+                                        "id": "IMG_0016",
+                                        "thumb": "thumbs/DSC03478.webp",
+                                        "original": "originals/DSC03478.JPG"
+                                },
+                                {
+                                        "id": "IMG_0017",
+                                        "thumb": "thumbs/DSC03479.webp",
+                                        "original": "originals/DSC03479.JPG"
+                                },
+                                {
+                                        "id": "IMG_0018",
+                                        "thumb": "thumbs/DSC03492.webp",
+                                        "original": "originals/DSC03492.JPG"
+                                },
+                                {
+                                        "id": "IMG_0019",
+                                        "thumb": "thumbs/DSC03500.webp",
+                                        "original": "originals/DSC03500.JPG"
+                                },
+                                {
+                                        "id": "IMG_0020",
+                                        "thumb": "thumbs/DSC03503.webp",
+                                        "original": "originals/DSC03503.JPG"
+                                },
+                                {
+                                        "id": "IMG_0021",
+                                        "thumb": "thumbs/DSC03507.webp",
+                                        "original": "originals/DSC03507.JPG"
+                                },
+                                {
+                                        "id": "IMG_0022",
+                                        "thumb": "thumbs/DSC03513.webp",
+                                        "original": "originals/DSC03513.JPG"
+                                },
+                                {
+                                        "id": "IMG_0023",
+                                        "thumb": "thumbs/DSC03514.webp",
+                                        "original": "originals/DSC03514.JPG"
+                                },
+                                {
+                                        "id": "IMG_0024",
+                                        "thumb": "thumbs/DSC03517.webp",
+                                        "original": "originals/DSC03517.JPG"
+                                },
+                                {
+                                        "id": "IMG_0025",
+                                        "thumb": "thumbs/DSC03520.webp",
+                                        "original": "originals/DSC03520.JPG"
+                                },
+                                {
+                                        "id": "IMG_0026",
+                                        "thumb": "thumbs/DSC03522.webp",
+                                        "original": "originals/DSC03522.JPG"
+                                },
+                                {
+                                        "id": "IMG_0027",
+                                        "thumb": "thumbs/DSC03524.webp",
+                                        "original": "originals/DSC03524.JPG"
+                                },
+                                {
+                                        "id": "IMG_0028",
+                                        "thumb": "thumbs/DSC03534.webp",
+                                        "original": "originals/DSC03534.JPG"
+                                },
+                                {
+                                        "id": "IMG_0029",
+                                        "thumb": "thumbs/DSC03537.webp",
+                                        "original": "originals/DSC03537.JPG"
+                                },
+                                {
+                                        "id": "IMG_0030",
+                                        "thumb": "thumbs/DSC03538.webp",
+                                        "original": "originals/DSC03538.JPG"
+                                },
+                                {
+                                        "id": "IMG_0031",
+                                        "thumb": "thumbs/DSC03540.webp",
+                                        "original": "originals/DSC03540.JPG"
                                 }
                         ]
                 }
