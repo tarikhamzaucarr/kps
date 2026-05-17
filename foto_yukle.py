@@ -12,11 +12,8 @@ BU SCRIPT ÜÇ ŞEY YAPAR:
 KLASÖR YAPISI:
   assets/photos/
   └── okul-slug/               ← Okul klasörü
-      ├── ayse-yilmaz/          ← Çocuk klasörü (isim-soyisim formatı)
-      │   ├── IMG_001.jpg
-      │   └── IMG_002.jpg
-      ├── mehmet-demir/
-      │   └── IMG_003.jpg
+      ├── IMG_001.jpg
+      ├── IMG_002.jpg
       └── ...
 
 KULLANIM:
@@ -147,69 +144,52 @@ def copy_to_originals(src_path, orig_path):
 # ══════════════════════════════════════════════
 def scan_school(school_dir, use_r2=False, r2_client=None, r2_bucket=None):
     """Bir okul klasörünü tara, thumbnail oluştur, opsiyonel R2 yükle"""
-    children = []
-    child_dirs = sorted([d for d in school_dir.iterdir()
-                         if d.is_dir() and d.name not in {'thumbs', 'originals'}])
+    photos = []
+    
+    photo_files = sorted([f for f in school_dir.iterdir()
+                          if f.is_file() and f.suffix.lower() in SUPPORTED_EXTS])
 
-    if not child_dirs:
-        return children
+    if not photo_files:
+        print(f"  ⚠️  {school_dir.name}: Fotoğraf yok, atlanıyor.")
+        return photos
 
-    for idx, child_dir in enumerate(child_dirs, 1):
-        photos = []
-        photo_files = sorted([f for f in child_dir.iterdir()
-                              if f.is_file() and f.suffix.lower() in SUPPORTED_EXTS])
+    for pidx, photo_file in enumerate(photo_files, 1):
+        photo_id = f"IMG_{pidx:04d}"
+        thumb_name = f"{photo_file.stem}.webp"
+        orig_name = photo_file.name
 
-        if not photo_files:
-            print(f"  ⚠️  {child_dir.name}: Fotoğraf yok, atlanıyor.")
-            continue
+        orig_dest = school_dir / "originals" / orig_name
+        thumb_dest = school_dir / "thumbs" / thumb_name
 
-        for pidx, photo_file in enumerate(photo_files, 1):
-            photo_id = f"IMG_{idx:02d}_{pidx:03d}"
-            thumb_name = f"{photo_file.stem}.webp"
-            orig_name = photo_file.name
+        # Orijinali kopyala
+        copy_to_originals(photo_file, orig_dest)
 
-            orig_dest = school_dir / "originals" / orig_name
-            thumb_dest = school_dir / "thumbs" / thumb_name
+        # Thumbnail oluştur
+        if not thumb_dest.exists():
+            print(f"    📸 Thumbnail: {photo_file.name}")
+            create_thumbnail(photo_file, thumb_dest)
 
-            # Orijinali kopyala
-            copy_to_originals(photo_file, orig_dest)
+        # R2'ye yükle
+        if use_r2 and r2_client:
+            school_slug = school_dir.name
+            r2_orig_key = f"{school_slug}/originals/{orig_name}"
+            r2_thumb_key = f"{school_slug}/thumbs/{thumb_name}"
+            try:
+                print(f"    ☁️  R2 yükleniyor: {orig_name}")
+                upload_to_r2(r2_client, r2_bucket, orig_dest, r2_orig_key)
+                upload_to_r2(r2_client, r2_bucket, thumb_dest, r2_thumb_key)
+            except Exception as e:
+                print(f"    ❌ R2 yükleme hatası: {e}")
 
-            # Thumbnail oluştur
-            if not thumb_dest.exists():
-                print(f"    📸 Thumbnail: {photo_file.name}")
-                create_thumbnail(photo_file, thumb_dest)
-
-            # R2'ye yükle
-            if use_r2 and r2_client:
-                school_slug = school_dir.name
-                r2_orig_key = f"{school_slug}/originals/{orig_name}"
-                r2_thumb_key = f"{school_slug}/thumbs/{thumb_name}"
-                try:
-                    print(f"    ☁️  R2 yükleniyor: {orig_name}")
-                    upload_to_r2(r2_client, r2_bucket, orig_dest, r2_orig_key)
-                    upload_to_r2(r2_client, r2_bucket, thumb_dest, r2_thumb_key)
-                except Exception as e:
-                    print(f"    ❌ R2 yükleme hatası: {e}")
-
-            photos.append({
-                "id": photo_id,
-                "thumb": f"thumbs/{thumb_name}",
-                "original": f"originals/{orig_name}"
-            })
-
-        child_name = child_dir.name.replace("-", " ").replace("_", " ").title()
-        pin = f"{idx:04d}"
-
-        children.append({
-            "id": f"child-{idx}",
-            "name": child_name,
-            "pin": pin,
-            "folder": child_dir.name,
-            "photos": photos
+        photos.append({
+            "id": photo_id,
+            "thumb": f"thumbs/{thumb_name}",
+            "original": f"originals/{orig_name}"
         })
-        print(f"  ✅ {child_name}: {len(photos)} fotoğraf (PIN: {pin})")
 
-    return children
+    print(f"  ✅ {len(photos)} fotoğraf bulundu ve işlendi.")
+
+    return photos
 
 
 # ══════════════════════════════════════════════
@@ -312,11 +292,11 @@ def main():
         print(f"\n🏫 {school_name} ({school_slug})")
         print("-" * 40)
 
-        children = scan_school(school_dir, args.r2, r2_client, r2_bucket)
+        photos = scan_school(school_dir, args.r2, r2_client, r2_bucket)
 
-        if not children:
-            print(f"  ⚠️  Çocuk klasörü bulunamadı.")
-            print(f"  Kullanım: {school_dir}/<cocuk-adi>/ altına fotoğrafları koyun.")
+        if not photos:
+            print(f"  ⚠️  Fotoğraf bulunamadı.")
+            print(f"  Kullanım: {school_dir}/ altına fotoğrafları koyun.")
             continue
 
         # PIN'leri sor
@@ -332,7 +312,7 @@ def main():
             "veliPin": veli_pin,
             "adminPin": admin_pin,
             "basePath": f"{school_slug}/",
-            "children": children
+            "photos": photos
         })
 
     if all_schools:
@@ -353,8 +333,7 @@ def main():
             print(f"     Veli PIN: {school['veliPin']}")
             print(f"     Admin: {school['adminPin']}")
             print(f"     URL: teslimat.html?okul={school['slug']}")
-            for child in school['children']:
-                print(f"     📁 {child['name']}: {len(child['photos'])} foto (PIN: {child['pin']})")
+            print(f"     📸 {len(school['photos'])} fotoğraf")
 
 
 if __name__ == "__main__":

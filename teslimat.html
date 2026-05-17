@@ -83,19 +83,6 @@
             <!-- Breadcrumb -->
             <div class="teslimat-breadcrumb" id="breadcrumb"></div>
 
-            <!-- ── FOLDER VIEW (Veli) ── -->
-            <div id="folderViewPanel" class="view-panel">
-                <div class="folder-header">
-                    <div>
-                        <h1 id="folderSchoolName">Klasörler</h1>
-                        <p id="folderChildCount">0 öğrenci</p>
-                    </div>
-                </div>
-                <div class="folder-grid" id="folderGrid">
-                    <!-- Folders injected by JS -->
-                </div>
-            </div>
-
             <!-- ── PHOTO VIEW ── -->
             <div id="photoViewPanel" class="view-panel">
                 <div class="photos-toolbar" id="photosToolbar"></div>
@@ -113,30 +100,6 @@
 
         </div>
     </main>
-
-    <!-- ═══════════ CHILD PIN MODAL ═══════════ -->
-    <div id="childPinOverlay" class="child-pin-overlay hidden">
-        <div class="child-pin-card">
-            <button id="childPinClose" class="child-pin-close">&times;</button>
-            <h3 id="childPinName">Klasör Adı</h3>
-            <p class="child-pin-subtitle">Bu klasöre erişmek için 4 haneli PIN kodunu girin.</p>
-            <input type="password" id="childPinInput" maxlength="4" placeholder="••••" autocomplete="off">
-            <div id="childPinError" class="pin-error">Hatalı PIN, lütfen tekrar deneyin.</div>
-            <button id="childPinSubmit" class="btn-main" style="width:100%;font-size:15px;padding:14px;">Giriş Yap</button>
-        </div>
-    </div>
-
-    <!-- ═══════════ RENAME MODAL (Admin) ═══════════ -->
-    <div id="renameOverlay" class="rename-overlay hidden">
-        <div class="rename-card">
-            <h3>Klasör Adını Düzenle</h3>
-            <input type="text" id="renameInput" placeholder="Yeni isim girin">
-            <div class="rename-actions">
-                <button id="renameCancelBtn" class="btn-ghost" style="font-size:13px;padding:8px 18px;">İptal</button>
-                <button id="renameSaveBtn" class="btn-action" style="font-size:13px;">Kaydet</button>
-            </div>
-        </div>
-    </div>
 
     <!-- ═══════════ ORDER MODAL ═══════════ -->
     <div id="orderOverlay" class="order-modal hidden">
@@ -195,22 +158,6 @@
         </div>
     </div>
 
-    <div id="pinChangeOverlay" class="rename-overlay hidden">
-        <div class="rename-card">
-            <h3>Klasör Şifresi Değiştir</h3>
-            <p id="pinChangeFolderName" style="color:var(--text-light);font-size:14px;margin-bottom:20px;"></p>
-            
-            <div style="margin-bottom:25px;text-align:left;">
-                <label style="display:block;margin-bottom:5px;font-weight:600;font-size:14px;">Yeni Klasör Şifresi (PIN)</label>
-                <input type="text" id="newFolderPinInput" style="letter-spacing:normal;font-size:16px;width:100%;padding:10px;border:1px solid var(--border-color);border-radius:var(--radius-sm);" placeholder="4 haneli PIN girin">
-            </div>
-
-            <div class="rename-actions">
-                <button id="pinChangeCancelBtn" class="btn-ghost" style="font-size:13px;padding:8px 18px;">İptal</button>
-                <button id="pinChangeSaveBtn" class="btn-action" style="font-size:13px;">Kaydet</button>
-            </div>
-        </div>
-    </div>
 
     <!-- ═══════════ DOWNLOAD OVERLAY ═══════════ -->
     <div id="dlOverlay" class="dl-overlay hidden">

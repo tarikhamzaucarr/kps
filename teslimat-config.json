@@ -1,182 +1,21 @@
 {
   "schools": [
     {
-      "slug": "nicekindergarten",
-      "name": "Nicekindergarten",
+      "slug": "test-okulu",
+      "name": "Test Okulu",
       "veliPin": "1234",
       "adminPin": "admin2026",
-      "basePath": "nicekindergarten/",
-      "children": [
+      "basePath": "test-okulu/",
+      "photos": [
         {
-          "id": "child-1",
-          "name": "Klasor",
-          "pin": "0001",
-          "folder": "klasor",
-          "photos": [
-            {
-              "id": "IMG_01_001",
-              "thumb": "thumbs/DSC03357.webp",
-              "original": "originals/DSC03357.JPG"
-            },
-            {
-              "id": "IMG_01_002",
-              "thumb": "thumbs/DSC03359.webp",
-              "original": "originals/DSC03359.JPG"
-            },
-            {
-              "id": "IMG_01_003",
-              "thumb": "thumbs/DSC03361.webp",
-              "original": "originals/DSC03361.JPG"
-            },
-            {
-              "id": "IMG_01_004",
-              "thumb": "thumbs/DSC03363.webp",
-              "original": "originals/DSC03363.JPG"
-            },
-            {
-              "id": "IMG_01_005",
-              "thumb": "thumbs/DSC03367.webp",
-              "original": "originals/DSC03367.JPG"
-            },
-            {
-              "id": "IMG_01_006",
-              "thumb": "thumbs/DSC03373.webp",
-              "original": "originals/DSC03373.JPG"
-            },
-            {
-              "id": "IMG_01_007",
-              "thumb": "thumbs/DSC03374.webp",
-              "original": "originals/DSC03374.JPG"
-            },
-            {
-              "id": "IMG_01_008",
-              "thumb": "thumbs/DSC03379.webp",
-              "original": "originals/DSC03379.JPG"
-            },
-            {
-              "id": "IMG_01_009",
-              "thumb": "thumbs/DSC03384.webp",
-              "original": "originals/DSC03384.JPG"
-            },
-            {
-              "id": "IMG_01_010",
-              "thumb": "thumbs/DSC03389.webp",
-              "original": "originals/DSC03389.JPG"
-            },
-            {
-              "id": "IMG_01_011",
-              "thumb": "thumbs/DSC03392.webp",
-              "original": "originals/DSC03392.JPG"
-            },
-            {
-              "id": "IMG_01_012",
-              "thumb": "thumbs/DSC03398.webp",
-              "original": "originals/DSC03398.JPG"
-            },
-            {
-              "id": "IMG_01_013",
-              "thumb": "thumbs/DSC03401.webp",
-              "original": "originals/DSC03401.JPG"
-            },
-            {
-              "id": "IMG_01_014",
-              "thumb": "thumbs/DSC03407.webp",
-              "original": "originals/DSC03407.JPG"
-            },
-            {
-              "id": "IMG_01_015",
-              "thumb": "thumbs/DSC03435.webp",
-              "original": "originals/DSC03435.JPG"
-            }
-          ]
+          "id": "IMG_0001",
+          "thumb": "thumbs/IMG_001.webp",
+          "original": "originals/IMG_001.jpg"
         },
         {
-          "id": "child-2",
-          "name": "Klasor2",
-          "pin": "0002",
-          "folder": "klasor2",
-          "photos": [
-            {
-              "id": "IMG_02_001",
-              "thumb": "thumbs/DSC03478.webp",
-              "original": "originals/DSC03478.JPG"
-            },
-            {
-              "id": "IMG_02_002",
-              "thumb": "thumbs/DSC03479.webp",
-              "original": "originals/DSC03479.JPG"
-            },
-            {
-              "id": "IMG_02_003",
-              "thumb": "thumbs/DSC03492.webp",
-              "original": "originals/DSC03492.JPG"
-            },
-            {
-              "id": "IMG_02_004",
-              "thumb": "thumbs/DSC03500.webp",
-              "original": "originals/DSC03500.JPG"
-            },
-            {
-              "id": "IMG_02_005",
-              "thumb": "thumbs/DSC03503.webp",
-              "original": "originals/DSC03503.JPG"
-            },
-            {
-              "id": "IMG_02_006",
-              "thumb": "thumbs/DSC03507.webp",
-              "original": "originals/DSC03507.JPG"
-            },
-            {
-              "id": "IMG_02_007",
-              "thumb": "thumbs/DSC03513.webp",
-              "original": "originals/DSC03513.JPG"
-            },
-            {
-              "id": "IMG_02_008",
-              "thumb": "thumbs/DSC03514.webp",
-              "original": "originals/DSC03514.JPG"
-            },
-            {
-              "id": "IMG_02_009",
-              "thumb": "thumbs/DSC03517.webp",
-              "original": "originals/DSC03517.JPG"
-            },
-            {
-              "id": "IMG_02_010",
-              "thumb": "thumbs/DSC03520.webp",
-              "original": "originals/DSC03520.JPG"
-            },
-            {
-              "id": "IMG_02_011",
-              "thumb": "thumbs/DSC03522.webp",
-              "original": "originals/DSC03522.JPG"
-            },
-            {
-              "id": "IMG_02_012",
-              "thumb": "thumbs/DSC03524.webp",
-              "original": "originals/DSC03524.JPG"
-            },
-            {
-              "id": "IMG_02_013",
-              "thumb": "thumbs/DSC03534.webp",
-              "original": "originals/DSC03534.JPG"
-            },
-            {
-              "id": "IMG_02_014",
-              "thumb": "thumbs/DSC03537.webp",
-              "original": "originals/DSC03537.JPG"
-            },
-            {
-              "id": "IMG_02_015",
-              "thumb": "thumbs/DSC03538.webp",
-              "original": "originals/DSC03538.JPG"
-            },
-            {
-              "id": "IMG_02_016",
-              "thumb": "thumbs/DSC03540.webp",
-              "original": "originals/DSC03540.JPG"
-            }
-          ]
+          "id": "IMG_0002",
+          "thumb": "thumbs/IMG_002.webp",
+          "original": "originals/IMG_002.jpg"
         }
       ]
     }

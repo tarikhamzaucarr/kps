@@ -12,182 +12,21 @@
     const INLINE_CONFIG = {
         "schools": [
                 {
-                        "slug": "nicekindergarten",
-                        "name": "Nicekindergarten",
+                        "slug": "test-okulu",
+                        "name": "Test Okulu",
                         "veliPin": "1234",
                         "adminPin": "admin2026",
-                        "basePath": "nicekindergarten/",
-                        "children": [
+                        "basePath": "test-okulu/",
+                        "photos": [
                                 {
-                                        "id": "child-1",
-                                        "name": "Klasor",
-                                        "pin": "0001",
-                                        "folder": "klasor",
-                                        "photos": [
-                                                {
-                                                        "id": "IMG_01_001",
-                                                        "thumb": "thumbs/DSC03357.webp",
-                                                        "original": "originals/DSC03357.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_002",
-                                                        "thumb": "thumbs/DSC03359.webp",
-                                                        "original": "originals/DSC03359.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_003",
-                                                        "thumb": "thumbs/DSC03361.webp",
-                                                        "original": "originals/DSC03361.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_004",
-                                                        "thumb": "thumbs/DSC03363.webp",
-                                                        "original": "originals/DSC03363.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_005",
-                                                        "thumb": "thumbs/DSC03367.webp",
-                                                        "original": "originals/DSC03367.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_006",
-                                                        "thumb": "thumbs/DSC03373.webp",
-                                                        "original": "originals/DSC03373.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_007",
-                                                        "thumb": "thumbs/DSC03374.webp",
-                                                        "original": "originals/DSC03374.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_008",
-                                                        "thumb": "thumbs/DSC03379.webp",
-                                                        "original": "originals/DSC03379.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_009",
-                                                        "thumb": "thumbs/DSC03384.webp",
-                                                        "original": "originals/DSC03384.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_010",
-                                                        "thumb": "thumbs/DSC03389.webp",
-                                                        "original": "originals/DSC03389.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_011",
-                                                        "thumb": "thumbs/DSC03392.webp",
-                                                        "original": "originals/DSC03392.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_012",
-                                                        "thumb": "thumbs/DSC03398.webp",
-                                                        "original": "originals/DSC03398.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_013",
-                                                        "thumb": "thumbs/DSC03401.webp",
-                                                        "original": "originals/DSC03401.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_014",
-                                                        "thumb": "thumbs/DSC03407.webp",
-                                                        "original": "originals/DSC03407.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_01_015",
-                                                        "thumb": "thumbs/DSC03435.webp",
-                                                        "original": "originals/DSC03435.JPG"
-                                                }
-                                        ]
+                                        "id": "IMG_0001",
+                                        "thumb": "thumbs/IMG_001.webp",
+                                        "original": "originals/IMG_001.jpg"
                                 },
                                 {
-                                        "id": "child-2",
-                                        "name": "Klasor2",
-                                        "pin": "0002",
-                                        "folder": "klasor2",
-                                        "photos": [
-                                                {
-                                                        "id": "IMG_02_001",
-                                                        "thumb": "thumbs/DSC03478.webp",
-                                                        "original": "originals/DSC03478.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_002",
-                                                        "thumb": "thumbs/DSC03479.webp",
-                                                        "original": "originals/DSC03479.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_003",
-                                                        "thumb": "thumbs/DSC03492.webp",
-                                                        "original": "originals/DSC03492.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_004",
-                                                        "thumb": "thumbs/DSC03500.webp",
-                                                        "original": "originals/DSC03500.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_005",
-                                                        "thumb": "thumbs/DSC03503.webp",
-                                                        "original": "originals/DSC03503.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_006",
-                                                        "thumb": "thumbs/DSC03507.webp",
-                                                        "original": "originals/DSC03507.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_007",
-                                                        "thumb": "thumbs/DSC03513.webp",
-                                                        "original": "originals/DSC03513.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_008",
-                                                        "thumb": "thumbs/DSC03514.webp",
-                                                        "original": "originals/DSC03514.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_009",
-                                                        "thumb": "thumbs/DSC03517.webp",
-                                                        "original": "originals/DSC03517.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_010",
-                                                        "thumb": "thumbs/DSC03520.webp",
-                                                        "original": "originals/DSC03520.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_011",
-                                                        "thumb": "thumbs/DSC03522.webp",
-                                                        "original": "originals/DSC03522.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_012",
-                                                        "thumb": "thumbs/DSC03524.webp",
-                                                        "original": "originals/DSC03524.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_013",
-                                                        "thumb": "thumbs/DSC03534.webp",
-                                                        "original": "originals/DSC03534.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_014",
-                                                        "thumb": "thumbs/DSC03537.webp",
-                                                        "original": "originals/DSC03537.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_015",
-                                                        "thumb": "thumbs/DSC03538.webp",
-                                                        "original": "originals/DSC03538.JPG"
-                                                },
-                                                {
-                                                        "id": "IMG_02_016",
-                                                        "thumb": "thumbs/DSC03540.webp",
-                                                        "original": "originals/DSC03540.JPG"
-                                                }
-                                        ]
+                                        "id": "IMG_0002",
+                                        "thumb": "thumbs/IMG_002.webp",
+                                        "original": "originals/IMG_002.jpg"
                                 }
                         ]
                 }
@@ -197,9 +36,7 @@
     // ── State ──
     let currentSchool = null;
     let currentRole = null;       // 'veli' | 'admin'
-    let unlockedChildId = null;   // child.id that veli unlocked
     let selectedPhotos = new Set();
-    let viewingChild = null;      // child currently being viewed
     let gLightboxInstance = null;
 
     // ── Helpers ──
@@ -230,7 +67,7 @@
 
         init() {
             const urlParams = new URLSearchParams(window.location.search);
-            const schoolSlug = urlParams.get('okul') || 'demo-okul'; // varsayılan
+            const schoolSlug = urlParams.get('okul');
 
             // Try fetch first, fall back to inline config (for file:// protocol)
             const loadConfig = async () => {
@@ -244,6 +81,11 @@
             };
 
             loadConfig().then(data => {
+                if (!schoolSlug) {
+                    this.showSchoolSelector(data.schools);
+                    return;
+                }
+                
                 const school = data.schools.find(s => s.slug === schoolSlug);
                 if (!school) {
                     this.showError('Okul bulunamadı: ' + schoolSlug);
@@ -264,6 +106,29 @@
             main.innerHTML = `<div class="container" style="padding-top:150px;text-align:center;"><h2>Hata</h2><p>${msg}</p></div>`;
             main.classList.remove('hidden');
             document.getElementById('teslimatAuth').classList.add('hidden');
+        },
+
+        showSchoolSelector(schools) {
+            const auth = document.getElementById('teslimatAuth');
+            let html = `<div class="auth-box" style="text-align:center;max-width:500px;margin: 50px auto;">
+                <div class="auth-icon" style="font-size:48px;margin-bottom:15px;">🏫</div>
+                <h1 class="auth-title">Kayıtlı Okullar</h1>
+                <p class="auth-subtitle" style="margin-bottom:30px;">Sisteme kayıtlı okullardan birini seçin.</p>
+                <div style="display:flex;flex-direction:column;gap:15px;">
+            `;
+            
+            if (schools.length === 0) {
+                html += `<p style="color:var(--text-light);">Henüz kayıtlı okul bulunmuyor.</p>`;
+            } else {
+                schools.forEach(s => {
+                    html += `<a href="?okul=${s.slug}" style="text-decoration:none;display:flex;justify-content:space-between;align-items:center;padding:18px 24px;background:#f8f9fc;color:var(--text-color);border:2px solid #eef0f6;border-radius:12px;transition:0.2s;" onmouseover="this.style.borderColor='var(--bento-blue)'" onmouseout="this.style.borderColor='#eef0f6'">
+                        <strong style="font-size:18px;">${s.name}</strong>
+                        <span style="font-size:24px;">→</span>
+                    </a>`;
+                });
+            }
+            html += `</div></div>`;
+            auth.innerHTML = html;
         },
 
         setupListeners() {
@@ -310,7 +175,7 @@
                     currentRole = 'veli';
                     document.getElementById('teslimatAuth').classList.add('hidden');
                     document.getElementById('teslimatMain').classList.remove('hidden');
-                    FolderView.render();
+                    PhotoViewer.open();
                 } else {
                     errEl.textContent = 'Hatalı PIN, lütfen tekrar deneyin.';
                     errEl.style.display = 'block';
@@ -343,159 +208,23 @@
                 const mods = JSON.parse(saved);
                 if (mods.veliPin) currentSchool.veliPin = mods.veliPin;
                 if (mods.adminPin) currentSchool.adminPin = mods.adminPin;
-                
-                // Apply renames and PINs
-                if (mods.renames) {
-                    mods.renames.forEach(r => {
-                        const child = currentSchool.children.find(c => c.id === r.id);
-                        if (child) {
-                            if (r.name) child.name = r.name;
-                            if (r.pin) child.pin = r.pin;
-                        }
-                    });
-                }
-                // Apply additions
-                if (mods.additions) {
-                    mods.additions.forEach(a => {
-                        if (!currentSchool.children.find(c => c.id === a.id)) {
-                            currentSchool.children.push(a);
-                        }
-                    });
-                }
             } catch (e) { /* ignore */ }
         },
 
         save() {
             const mods = { 
                 veliPin: currentSchool.veliPin,
-                adminPin: currentSchool.adminPin,
-                renames: [], 
-                additions: [] 
+                adminPin: currentSchool.adminPin
             };
-            // We track all current names/pins as potential overrides
-            currentSchool.children.forEach(c => {
-                if (c._added) {
-                    mods.additions.push(c);
-                } else {
-                    mods.renames.push({ id: c.id, name: c.name, pin: c.pin });
-                }
-            });
             localStorage.setItem(this.getKey(), JSON.stringify(mods));
         }
     };
 
     // ==========================================
-    // MODULE 3: FolderView
-    // ==========================================
-    const FolderView = {
-        render() {
-            showView('folderViewPanel');
-            this.updateBreadcrumb();
-            const grid = document.getElementById('folderGrid');
-            const children = currentSchool.children;
-
-            document.getElementById('folderSchoolName').textContent = currentSchool.name;
-            document.getElementById('folderChildCount').textContent = `${children.length} öğrenci`;
-
-            let html = '';
-            children.forEach(child => {
-                const isUnlocked = (currentRole === 'admin') || (unlockedChildId === child.id);
-                const lockClass = isUnlocked ? 'unlocked' : 'locked';
-                const lockBadge = isUnlocked ? '' : '<span class="lock-badge">🔒</span>';
-                const emoji = isUnlocked ? '📂' : '📁';
-
-                html += `
-                    <div class="child-folder ${lockClass}" data-child-id="${child.id}">
-                        ${lockBadge}
-                        <span class="folder-emoji">${emoji}</span>
-                        <div class="folder-name" title="${child.name}">${child.name}</div>
-                        <div class="folder-count">${child.photos.length} fotoğraf</div>
-                    </div>
-                `;
-            });
-            grid.innerHTML = html;
-
-            // Click handlers
-            grid.querySelectorAll('.child-folder').forEach(card => {
-                card.addEventListener('click', () => {
-                    const childId = card.dataset.childId;
-                    const child = currentSchool.children.find(c => c.id === childId);
-                    if (!child) return;
-
-                    if (currentRole === 'admin' || unlockedChildId === child.id) {
-                        PhotoViewer.open(child);
-                    } else {
-                        ChildPinModal.open(child);
-                    }
-                });
-            });
-        },
-
-        updateBreadcrumb() {
-            document.getElementById('breadcrumb').innerHTML = `
-                <span class="bc-current">${currentSchool.name}</span>
-            `;
-        }
-    };
-
-    // ==========================================
-    // MODULE 4: ChildPinModal
-    // ==========================================
-    const ChildPinModal = {
-        open(child) {
-            const overlay = document.getElementById('childPinOverlay');
-            overlay.classList.remove('hidden');
-            document.getElementById('childPinName').textContent = child.name;
-            const input = document.getElementById('childPinInput');
-            const error = document.getElementById('childPinError');
-            input.value = '';
-            error.style.display = 'none';
-            input.focus();
-
-            // Store reference
-            this._currentChild = child;
-
-            // Listeners (re-set)
-            const submitBtn = document.getElementById('childPinSubmit');
-            const closeBtn = document.getElementById('childPinClose');
-
-            const newSubmit = submitBtn.cloneNode(true);
-            submitBtn.parentNode.replaceChild(newSubmit, submitBtn);
-            const newClose = closeBtn.cloneNode(true);
-            closeBtn.parentNode.replaceChild(newClose, closeBtn);
-
-            newSubmit.addEventListener('click', () => this.verify());
-            newClose.addEventListener('click', () => this.close());
-            input.onkeypress = (e) => { if (e.key === 'Enter') this.verify(); };
-        },
-
-        verify() {
-            const input = document.getElementById('childPinInput');
-            const error = document.getElementById('childPinError');
-            if (input.value === this._currentChild.pin) {
-                unlockedChildId = this._currentChild.id;
-                this.close();
-                showToast(`${this._currentChild.name} klasörüne erişim sağlandı ✓`, 'success');
-                FolderView.render();
-                // Auto-open the folder
-                setTimeout(() => PhotoViewer.open(this._currentChild), 300);
-            } else {
-                error.style.display = 'block';
-                setTimeout(() => error.style.display = 'none', 3000);
-            }
-        },
-
-        close() {
-            document.getElementById('childPinOverlay').classList.add('hidden');
-        }
-    };
-
-    // ==========================================
-    // MODULE 5: PhotoViewer
+    // MODULE 3: PhotoViewer
     // ==========================================
     const PhotoViewer = {
-        open(child) {
-            viewingChild = child;
+        open() {
             selectedPhotos.clear();
             showView('photoViewPanel');
             this.updateBreadcrumb();
@@ -505,13 +234,10 @@
 
         updateBreadcrumb() {
             document.getElementById('breadcrumb').innerHTML = `
-                <a id="bcFolders">📁 ${currentSchool.name}</a>
-                <span class="bc-sep">›</span>
-                <span class="bc-current">${viewingChild.name}</span>
+                <a id="bcFolders" style="cursor:pointer;">📷 ${currentSchool.name} Fotoğrafları</a>
             `;
             document.getElementById('bcFolders').addEventListener('click', () => {
                 if (currentRole === 'admin') AdminPanel.render();
-                else FolderView.render();
             });
         },
 
@@ -519,9 +245,9 @@
             const toolbar = document.getElementById('photosToolbar');
             toolbar.innerHTML = `
                 <div class="toolbar-left">
-                    <button class="btn-back" id="photosBackBtn">← Geri</button>
-                    <h2 style="font-size:20px; font-family:'Outfit',sans-serif;">${viewingChild.name}</h2>
-                    <span style="color:var(--text-light);font-size:13px;font-weight:600;">${viewingChild.photos.length} fotoğraf</span>
+                    <button class="btn-back" id="photosBackBtn" style="display:${currentRole === 'admin' ? 'inline-flex' : 'none'};">← Admin</button>
+                    <h2 style="font-size:20px; font-family:'Outfit',sans-serif;">${currentSchool.name}</h2>
+                    <span style="color:var(--text-light);font-size:13px;font-weight:600;">${currentSchool.photos.length} fotoğraf</span>
                 </div>
                 <div class="toolbar-right">
                     <button class="btn-ghost" id="selectAllPhotosBtn" style="font-size:12px;padding:7px 14px;">Tümünü Seç</button>
@@ -538,17 +264,16 @@
 
             document.getElementById('photosBackBtn').addEventListener('click', () => {
                 if (currentRole === 'admin') AdminPanel.render();
-                else FolderView.render();
             });
 
             document.getElementById('selectAllPhotosBtn').addEventListener('click', (e) => {
-                const allSelected = selectedPhotos.size === viewingChild.photos.length;
+                const allSelected = selectedPhotos.size === currentSchool.photos.length;
                 if (allSelected) {
                     selectedPhotos.clear();
                     $$('.photo-card-t').forEach(c => c.classList.remove('selected'));
                     e.target.textContent = 'Tümünü Seç';
                 } else {
-                    viewingChild.photos.forEach(p => selectedPhotos.add(p.id));
+                    currentSchool.photos.forEach(p => selectedPhotos.add(p.id));
                     $$('.photo-card-t').forEach(c => c.classList.add('selected'));
                     e.target.textContent = 'Seçimi Temizle';
                 }
@@ -562,7 +287,7 @@
         renderPhotos() {
             const grid = document.getElementById('photoGridT');
             let html = '';
-            viewingChild.photos.forEach(photo => {
+            currentSchool.photos.forEach(photo => {
                 const thumbUrl = PHOTO_BASE_URL + currentSchool.basePath + photo.thumb;
                 html += `
                     <div class="photo-card-t ${selectedPhotos.has(photo.id) ? 'selected' : ''}" data-photo-id="${photo.id}">
@@ -614,11 +339,11 @@
         },
 
         openLightbox(startPhotoId) {
-            const elements = viewingChild.photos.map(p => ({
+            const elements = currentSchool.photos.map(p => ({
                 href: PHOTO_BASE_URL + currentSchool.basePath + p.original,
                 type: 'image'
             }));
-            const startIndex = viewingChild.photos.findIndex(p => p.id === startPhotoId);
+            const startIndex = currentSchool.photos.findIndex(p => p.id === startPhotoId);
 
             if (gLightboxInstance) gLightboxInstance.destroy();
             gLightboxInstance = GLightbox({
@@ -644,117 +369,26 @@
                 <div class="admin-toolbar">
                     <div>
                         <h1>🛡️ Admin Paneli</h1>
-                        <p style="color:var(--text-light);font-size:14px;margin-top:4px;">${currentSchool.name} — ${currentSchool.children.length} öğrenci</p>
+                        <p style="color:var(--text-light);font-size:14px;margin-top:4px;">${currentSchool.name} — ${currentSchool.photos.length} fotoğraf</p>
                     </div>
                     <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
                         <button class="btn-action" id="generalPinBtn">⚙️ Genel Şifreler</button>
                         <button class="btn-action" id="downloadConfigBtn">⬇️ Ayarları İndir</button>
-                        <button class="btn-action blue" id="addFolderBtn">+ Yeni Klasör</button>
+                        <button class="btn-action blue" id="viewPhotosBtn">👁️ Fotoğrafları Gör</button>
                     </div>
                 </div>
-                <div class="admin-folder-list" id="adminFolderList"></div>
             `;
             container.innerHTML = html;
 
-            this.renderList();
-
-            document.getElementById('addFolderBtn').addEventListener('click', () => this.addFolder());
             document.getElementById('generalPinBtn').addEventListener('click', () => this.showGeneralPinModal());
             document.getElementById('downloadConfigBtn').addEventListener('click', () => this.downloadConfig());
-        },
-
-        renderList() {
-            const list = document.getElementById('adminFolderList');
-            let html = '';
-            currentSchool.children.forEach(child => {
-                html += `
-                    <div class="admin-folder-row" data-child-id="${child.id}">
-                        <span class="afr-icon">📁</span>
-                        <div class="afr-info">
-                            <div class="afr-name">${child.name}</div>
-                            <div class="afr-meta">${child.photos.length} fotoğraf · PIN: ${child.pin}</div>
-                        </div>
-                        <div class="afr-actions">
-                            <button class="afr-btn edit" data-action="rename">✏️ Düzenle</button>
-                            <button class="afr-btn" data-action="change-pin">🔑 Şifre</button>
-                            <button class="afr-btn view" data-action="view">👁️ Görüntüle</button>
-                            <button class="afr-btn delete" data-action="delete">🗑️ Sil</button>
-                        </div>
-                    </div>
-                `;
-            });
-            list.innerHTML = html;
-
-            // Action handlers
-            list.querySelectorAll('.afr-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const childId = btn.closest('.admin-folder-row').dataset.childId;
-                    const child = currentSchool.children.find(c => c.id === childId);
-                    if (!child) return;
-
-                    const action = btn.dataset.action;
-                    if (action === 'rename') this.showRename(child);
-                    else if (action === 'change-pin') this.showPinChangeModal(child);
-                    else if (action === 'view') PhotoViewer.open(child);
-                    else if (action === 'delete') this.deleteFolder(child);
-                });
-            });
+            document.getElementById('viewPhotosBtn').addEventListener('click', () => PhotoViewer.open());
         },
 
         updateBreadcrumb() {
             document.getElementById('breadcrumb').innerHTML = `
                 <span class="bc-current">🛡️ Admin — ${currentSchool.name}</span>
             `;
-        },
-
-        addFolder() {
-            const name = prompt('Yeni klasör adı (çocuk adı):');
-            if (!name || !name.trim()) return;
-
-            const id = 'child-' + Date.now();
-            const pin = String(Math.floor(1000 + Math.random() * 9000));
-            currentSchool.children.push({
-                id: id,
-                name: name.trim(),
-                pin: pin,
-                folder: name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
-                photos: [],
-                _added: true
-            });
-            AdminData.save();
-            this.renderList();
-            showToast(`"${name.trim()}" klasörü oluşturuldu. PIN: ${pin}`, 'success');
-        },
-
-        showRename(child) {
-            const overlay = document.getElementById('renameOverlay');
-            overlay.classList.remove('hidden');
-            const input = document.getElementById('renameInput');
-            input.value = child.name;
-            input.focus();
-            input.select();
-
-            const saveBtn = document.getElementById('renameSaveBtn');
-            const cancelBtn = document.getElementById('renameCancelBtn');
-
-            const newSave = saveBtn.cloneNode(true);
-            saveBtn.parentNode.replaceChild(newSave, saveBtn);
-            const newCancel = cancelBtn.cloneNode(true);
-            cancelBtn.parentNode.replaceChild(newCancel, cancelBtn);
-
-            newSave.addEventListener('click', () => {
-                const newName = input.value.trim();
-                if (newName) {
-                    child.name = newName;
-                    AdminData.save();
-                    this.renderList();
-                    showToast(`Klasör adı güncellendi: "${newName}"`, 'success');
-                }
-                overlay.classList.add('hidden');
-            });
-
-            newCancel.addEventListener('click', () => overlay.classList.add('hidden'));
-            input.onkeypress = (e) => { if (e.key === 'Enter') newSave.click(); };
         },
 
         showGeneralPinModal() {
@@ -785,44 +419,8 @@
             newCancel.addEventListener('click', () => overlay.classList.add('hidden'));
         },
 
-        showPinChangeModal(child) {
-            const overlay = document.getElementById('pinChangeOverlay');
-            overlay.classList.remove('hidden');
-            document.getElementById('pinChangeFolderName').textContent = `${child.name} klasörü için şifre belirleyin.`;
-            
-            const input = document.getElementById('newFolderPinInput');
-            input.value = child.pin || '';
-            input.focus();
-            input.select();
-            
-            const saveBtn = document.getElementById('pinChangeSaveBtn');
-            const cancelBtn = document.getElementById('pinChangeCancelBtn');
-            
-            const newSave = saveBtn.cloneNode(true);
-            saveBtn.parentNode.replaceChild(newSave, saveBtn);
-            const newCancel = cancelBtn.cloneNode(true);
-            cancelBtn.parentNode.replaceChild(newCancel, cancelBtn);
-
-            newSave.addEventListener('click', () => {
-                const newPin = input.value.trim();
-                if (newPin) {
-                    child.pin = newPin;
-                    AdminData.save();
-                    this.renderList();
-                    showToast(`"${child.name}" klasör şifresi güncellendi. Ayarları indirmeyi unutmayın.`, 'success');
-                }
-                overlay.classList.add('hidden');
-            });
-            newCancel.addEventListener('click', () => overlay.classList.add('hidden'));
-            input.onkeypress = (e) => { if (e.key === 'Enter') newSave.click(); };
-        },
-
         downloadConfig() {
-            // Strip out local internal properties before downloading
-            const cleanSchool = JSON.parse(JSON.stringify(currentSchool));
-            cleanSchool.children.forEach(c => { delete c._added; });
-            
-            const configObj = { schools: [cleanSchool] };
+            const configObj = { schools: [currentSchool] };
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(configObj, null, 2));
             const dlAnchorElem = document.createElement('a');
             dlAnchorElem.setAttribute("href", dataStr);
@@ -831,14 +429,6 @@
             dlAnchorElem.click();
             document.body.removeChild(dlAnchorElem);
             showToast('teslimat-config.json dosyası indirildi. Lütfen eski dosya ile değiştirin.', 'success');
-        },
-
-        deleteFolder(child) {
-            if (!confirm(`"${child.name}" klasörünü silmek istediğinize emin misiniz?`)) return;
-            currentSchool.children = currentSchool.children.filter(c => c.id !== child.id);
-            AdminData.save();
-            this.renderList();
-            showToast(`"${child.name}" klasörü silindi.`, 'error');
         }
     };
 
@@ -863,7 +453,7 @@
                 if (total === 1) {
                     // Single file — direct download
                     const photoId = [...selectedPhotos][0];
-                    const photo = viewingChild.photos.find(p => p.id === photoId);
+                    const photo = currentSchool.photos.find(p => p.id === photoId);
                     const url = PHOTO_BASE_URL + currentSchool.basePath + photo.original;
                     const response = await fetch(url);
                     const blob = await response.blob();
@@ -878,8 +468,8 @@
                 } else {
                     // Multiple — ZIP
                     const zip = new JSZip();
-                    const folder = zip.folder(viewingChild.name.replace(/\s+/g, '_'));
-                    const photosToDownload = viewingChild.photos.filter(p => selectedPhotos.has(p.id));
+                    const folder = zip.folder(currentSchool.name.replace(/\s+/g, '_'));
+                    const photosToDownload = currentSchool.photos.filter(p => selectedPhotos.has(p.id));
 
                     for (const photo of photosToDownload) {
                         const url = PHOTO_BASE_URL + currentSchool.basePath + photo.original;
@@ -894,7 +484,7 @@
 
                     status.textContent = 'ZIP oluşturuluyor...';
                     const zipBlob = await zip.generateAsync({ type: 'blob' });
-                    saveAs(zipBlob, `${viewingChild.name.replace(/\s+/g, '_')}_fotograflar.zip`);
+                    saveAs(zipBlob, `${currentSchool.name.replace(/\s+/g, '_')}_fotograflar.zip`);
                 }
                 showToast('İndirme tamamlandı ✓', 'success');
             } catch (err) {
@@ -917,7 +507,7 @@
 
             // Fill summary
             const summary = document.getElementById('orderSummary');
-            summary.innerHTML = `<strong>${viewingChild.name}</strong> — ${selectedPhotos.size} fotoğraf seçildi<br>
+            summary.innerHTML = `<strong>${currentSchool.name}</strong> — ${selectedPhotos.size} fotoğraf seçildi<br>
                 <small>Fotoğraf ID'ler: ${[...selectedPhotos].join(', ')}</small>`;
 
             // Setup form
@@ -941,8 +531,8 @@
 
                 // Build order detail
                 const fd = new FormData(newForm);
-                fd.set('_subject', `[SİPARİŞ] ${viewingChild.name} — Dijital Teslimat`);
-                fd.set('Çocuk Adı', viewingChild.name);
+                fd.set('_subject', `[SİPARİŞ] ${currentSchool.name} — Dijital Teslimat`);
+                fd.set('Okul Adı', currentSchool.name);
                 fd.set('Seçilen Fotoğraflar', [...selectedPhotos].join(', '));
                 fd.set('Fotoğraf Sayısı', selectedPhotos.size);
 
