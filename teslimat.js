@@ -4298,6 +4298,10 @@
             const urlParams = new URLSearchParams(window.location.search);
             const schoolSlug = urlParams.get('okul') || window.location.hash.replace('#','') || null;
 
+            if (urlParams.has('admin')) {
+                this.selectedRole = 'admin';
+            }
+
             // Try fetch first, fall back to inline config (for file:// protocol)
             const loadConfig = async () => {
                 try {
@@ -4364,8 +4368,8 @@
                 const raw = sessionStorage.getItem('kps_session');
                 if (!raw) return false;
                 const session = JSON.parse(raw);
-                // Only restore if same school and session is less than 4 hours old
-                if (session.slug === currentSchool.slug && (Date.now() - session.ts) < 4 * 60 * 60 * 1000) {
+                // Only restore if same school and session is less than 5 minutes old
+                if (session.slug === currentSchool.slug && (Date.now() - session.ts) < 5 * 60 * 1000) {
                     currentRole = session.role;
                     document.getElementById('teslimatAuth').classList.add('hidden');
                     document.getElementById('teslimatMain').classList.remove('hidden');
@@ -4402,9 +4406,10 @@
                 html += `<p style="color:var(--text-light);">Henüz kayıtlı okul bulunmuyor.</p>`;
             } else {
                 schools.forEach(s => {
-                    html += `<a href="?okul=${s.slug}" style="text-decoration:none;display:flex;justify-content:space-between;align-items:center;padding:18px 24px;background:#f8f9fc;color:var(--text-color);border:2px solid #eef0f6;border-radius:12px;transition:0.2s;" onmouseover="this.style.borderColor='var(--bento-blue)'" onmouseout="this.style.borderColor='#eef0f6'">
-                        <strong style="font-size:18px;">${s.name}</strong>
-                        <span style="font-size:24px;">→</span>
+                    const adminParam = new URLSearchParams(window.location.search).has('admin') ? '&admin' : '';
+                    html += `<a href="?okul=${s.slug}${adminParam}" style="text-decoration:none;display:flex;justify-content:space-between;align-items:center;padding:18px 24px;background:#f8f9fc;color:var(--text-color);border:2px solid #eef0f6;border-radius:12px;transition:0.2s;" onmouseover="this.style.borderColor='var(--bento-blue)'" onmouseout="this.style.borderColor='#eef0f6'">
+                         <strong style="font-size:18px;">${s.name}</strong>
+                         <span style="font-size:24px;">→</span>
                     </a>`;
                 });
             }
@@ -4413,6 +4418,23 @@
         },
 
         setupListeners() {
+            // Pre-select role if admin was selected via URL param
+            if (this.selectedRole === 'admin') {
+                const veliCard = document.querySelector('.role-card[data-role="veli"]');
+                const adminCard = document.querySelector('.role-card[data-role="admin"]');
+                if (veliCard && adminCard) {
+                    veliCard.classList.remove('active');
+                    adminCard.classList.add('active');
+                }
+                const pinField = document.getElementById('authPinInput');
+                const passField = document.getElementById('authPassInput');
+                if (pinField && passField) {
+                    pinField.style.display = 'none';
+                    passField.style.display = 'block';
+                    setTimeout(() => passField.focus(), 100);
+                }
+            }
+
             // Role cards
             $$('.role-card').forEach(card => {
                 card.addEventListener('click', () => {
@@ -4537,7 +4559,8 @@
                     <div class="toolbar-left">
                         <button class="btn-back" id="photosBackBtn" style="display:${currentRole === 'admin' ? 'inline-flex' : 'none'};">← Admin</button>
                         <h2 style="font-size:20px; font-family:'Outfit',sans-serif;">${currentSchool.name}</h2>
-                        <span style="color:var(--text-light);font-size:13px;font-weight:600;">${currentSchool.photos.length} fotoğraf</span>
+                        <span style="color:var(--text-light);font-size:13px;font-weight:600;margin-right:8px;">${currentSchool.photos.length} fotoğraf</span>
+                        <button class="btn-ghost" id="logoutBtn" style="font-size:11px;padding:4px 8px;border-color:transparent;color:var(--bento-red);cursor:pointer;" title="Oturumu Kapat">🚪 Çıkış</button>
                     </div>
                     <div class="toolbar-right">
                         <button class="btn-ghost" id="downloadAllBtn" style="font-size:12px;padding:7px 14px; margin-right: 6px;">Tümünü İndir</button>
@@ -4548,6 +4571,11 @@
 
                 document.getElementById('photosBackBtn').addEventListener('click', () => {
                     if (currentRole === 'admin') AdminPanel.render();
+                });
+
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    sessionStorage.removeItem('kps_session');
+                    window.location.reload();
                 });
 
                 const toggleBtn = document.getElementById('toggleSelectModeBtn');
@@ -4898,8 +4926,16 @@
             PriceManager.load();
             const c = document.getElementById('adminContent');
             c.innerHTML = `
-                <div class="admin-toolbar"><div><h1>🛡️ Admin Paneli</h1><p style="color:var(--text-light);font-size:14px;margin-top:4px;">${currentSchool.name} — ${currentSchool.photos.length} fotoğraf</p></div>
-                <button class="btn-action blue" id="viewPhotosBtn">👁️ Fotoğrafları Gör</button></div>
+                <div class="admin-toolbar">
+                    <div>
+                        <h1>🛡️ Admin Paneli</h1>
+                        <p style="color:var(--text-light);font-size:14px;margin-top:4px;">${currentSchool.name} — ${currentSchool.photos.length} fotoğraf</p>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <button class="btn-action blue" id="viewPhotosBtn">👁️ Fotoğrafları Gör</button>
+                        <button class="btn-action red" id="adminLogoutBtn" style="background:#e74c3c; border-color:#e74c3c; color:#fff;">🚪 Çıkış</button>
+                    </div>
+                </div>
                 <div class="admin-tabs" id="adminTabs">
                     <button class="admin-tab active" data-tab="general">⚙️ Genel</button>
                     <button class="admin-tab" data-tab="prices">💰 Fiyatlar</button>
@@ -4908,6 +4944,10 @@
                 </div>
                 <div class="admin-tab-content" id="adminTabContent"></div>`;
             document.getElementById('viewPhotosBtn').addEventListener('click', () => PhotoViewer.open());
+            document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+                sessionStorage.removeItem('kps_session');
+                window.location.reload();
+            });
             document.getElementById('adminTabs').addEventListener('click', e => {
                 const tab=e.target.closest('.admin-tab'); if(!tab) return;
                 c.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
