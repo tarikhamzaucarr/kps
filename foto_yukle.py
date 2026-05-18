@@ -140,7 +140,7 @@ def create_thumbnail(src_path, thumb_path, width=THUMB_WIDTH):
 # ══════════════════════════════════════════════
 def scan_and_process(source_dir, school_slug, use_r2=False, r2_client=None, r2_bucket=None):
     """
-    Kaynak klasörden fotoğrafları (ve alt klasörleri) tarar, thumbnail oluşturur, R2'ye yükler.
+    Kaynak klasörden fotoğrafları tarar, thumbnail oluşturur, R2'ye yükler.
     Kaynak klasördeki fotoğrafları assets/photos/okul-slug/ altına kopyalar.
     """
     source_dir = Path(source_dir)
@@ -149,9 +149,9 @@ def scan_and_process(source_dir, school_slug, use_r2=False, r2_client=None, r2_b
     (dest_dir / "originals").mkdir(exist_ok=True)
     (dest_dir / "thumbs").mkdir(exist_ok=True)
 
-    # Fotoğrafları tara (Alt klasörler dahil - örn: LR, LR ek)
+    # Fotoğrafları tara
     photo_files = sorted([
-        f for f in source_dir.rglob("*")
+        f for f in source_dir.iterdir()
         if f.is_file() and f.suffix.lower() in SUPPORTED_EXTS
     ])
 
@@ -160,7 +160,7 @@ def scan_and_process(source_dir, school_slug, use_r2=False, r2_client=None, r2_b
         return []
 
     total = len(photo_files)
-    print(f"  📸 {total} fotoğraf bulundu (alt klasörler dahil).\n")
+    print(f"  📸 {total} fotoğraf bulundu.\n")
 
     photos = []
     r2_upload_queue = []
@@ -176,13 +176,7 @@ def scan_and_process(source_dir, school_slug, use_r2=False, r2_client=None, r2_b
         
         # Dosya adını temizle (boşlukları ve özel karakterleri koru)
         orig_name = photo_file.name
-        
-        # Alt klasör varsa çakışmayı önlemek için klasör adını ön ek yapalım
-        if photo_file.parent != source_dir:
-            sub_folder_name = photo_file.parent.name
-            orig_name = f"{sub_folder_name}_{orig_name}"
-            
-        thumb_name = Path(orig_name).stem + ".jpg"
+        thumb_name = photo_file.stem + ".jpg"
 
         orig_dest = dest_dir / "originals" / orig_name
         thumb_dest = dest_dir / "thumbs" / thumb_name
@@ -275,30 +269,18 @@ def scan_and_process(source_dir, school_slug, use_r2=False, r2_client=None, r2_b
 
 
 # ══════════════════════════════════════════════
-# CONFIG GÜNCELLEME (MEVCUT OKULLARI KORUR)
+# CONFIG GÜNCELLEME
 # ══════════════════════════════════════════════
 def generate_config(schools_data):
-    """teslimat-config.json güncelle (mevcut okulları korur)"""
-    existing_config = {"schools": []}
-    if CONFIG_FILE.exists():
-        try:
-            with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
-                existing_config = json.load(f)
-        except Exception as e:
-            print(f"⚠️  Mevcut config okunamadı: {e}")
-
-    schools_dict = {s["slug"]: s for s in existing_config.get("schools", [])}
-    for new_school in schools_data:
-        schools_dict[new_school["slug"]] = new_school
-
-    config = {"schools": list(schools_dict.values())}
+    """teslimat-config.json güncelle"""
+    config = {"schools": schools_data}
     with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
         json.dump(config, f, ensure_ascii=False, indent=2)
     print(f"\n📄 {CONFIG_FILE} güncellendi.")
 
 
 def update_inline_config(schools_data):
-    """teslimat.js INLINE_CONFIG güncelle (mevcut okulları korur)"""
+    """teslimat.js INLINE_CONFIG güncelle"""
     if not JS_FILE.exists():
         return
 
@@ -320,17 +302,7 @@ def update_inline_config(schools_data):
                 json_end = i + 1
                 break
 
-    try:
-        existing_config = json.loads(js[json_start:json_end])
-    except Exception as e:
-        existing_config = {"schools": []}
-
-    schools_dict = {s["slug"]: s for s in existing_config.get("schools", [])}
-    for new_school in schools_data:
-        schools_dict[new_school["slug"]] = new_school
-
-    new_config = {"schools": list(schools_dict.values())}
-    new_json = json.dumps(new_config, ensure_ascii=False, indent=8)
+    new_json = json.dumps({"schools": schools_data}, ensure_ascii=False, indent=8)
     JS_FILE.write_text(js[:json_start] + new_json + js[json_end:], encoding='utf-8')
     print(f"📄 {JS_FILE} INLINE_CONFIG güncellendi.")
 
@@ -343,6 +315,7 @@ def main():
     parser.add_argument('--r2', action='store_true', help='Cloudflare R2 ye yükle')
     parser.add_argument('--okul', type=str, help='Okul slug (örn: nicekindergarten)')
     parser.add_argument('--kaynak', type=str, help='Fotoğraf kaynak klasörü (dış klasör)')
+    parser.add_argument('--ekle', action='store_true', help='Mevcut fotoğraflara EK olarak yükle (üzerine yazmaz)')
     parser.add_argument('--pin', type=str, default='1234', help='Veli PIN (varsayılan: 1234)')
     parser.add_argument('--admin', type=str, default='admin2026', help='Admin şifresi')
     parser.add_argument('--workers', type=int, default=10, help='Paralel R2 yükleme sayısı')
@@ -390,16 +363,53 @@ def main():
         photos = scan_and_process(source, school_slug, args.r2, r2_client, r2_bucket)
 
         if photos:
-            all_schools = [{
-                "slug": school_slug,
-                "name": school_name,
-                "veliPin": args.pin,
-                "adminPin": args.admin,
-                "basePath": f"{school_slug}/",
-                "photos": photos
-            }]
-            generate_config(all_schools)
-            update_inline_config(all_schools)
+            # --ekle modu: mevcut fotoğrafların üzerine ekle
+            if args.ekle and CONFIG_FILE.exists():
+                try:
+                    with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+                        existing = json.load(f)
+                    existing_school = next((s for s in existing["schools"] if s["slug"] == school_slug), None)
+                    if existing_school:
+                        # Mevcut fotoğraf sayısından devam et (ID çakışmasını önle)
+                        offset = len(existing_school["photos"])
+                        for i, p in enumerate(photos):
+                            p["id"] = f"IMG_{offset + i + 1:04d}"
+                        
+                        # Aynı dosya adı varsa atla (duplicate koruması)
+                        existing_originals = {p["original"] for p in existing_school["photos"]}
+                        new_photos = [p for p in photos if p["original"] not in existing_originals]
+                        
+                        existing_school["photos"].extend(new_photos)
+                        print(f"  ➕ {len(new_photos)} yeni fotoğraf eklendi (mevcut: {offset}, toplam: {len(existing_school['photos'])})")
+                        
+                        generate_config(existing["schools"])
+                        update_inline_config(existing["schools"])
+                    else:
+                        print(f"  ⚠️  '{school_slug}' mevcut config'de bulunamadı, yeni okul olarak ekleniyor.")
+                        all_schools = existing["schools"] + [{
+                            "slug": school_slug,
+                            "name": school_name,
+                            "veliPin": args.pin,
+                            "adminPin": args.admin,
+                            "basePath": f"{school_slug}/",
+                            "photos": photos
+                        }]
+                        generate_config(all_schools)
+                        update_inline_config(all_schools)
+                except Exception as e:
+                    print(f"  ❌ Mevcut config okunamadı: {e}")
+                    sys.exit(1)
+            else:
+                all_schools = [{
+                    "slug": school_slug,
+                    "name": school_name,
+                    "veliPin": args.pin,
+                    "adminPin": args.admin,
+                    "basePath": f"{school_slug}/",
+                    "photos": photos
+                }]
+                generate_config(all_schools)
+                update_inline_config(all_schools)
     else:
         # Eski davranış — assets/photos/ içindeki klasörleri tara
         if args.okul:
