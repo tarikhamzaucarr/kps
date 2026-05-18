@@ -225,6 +225,25 @@ nav.stuck {
     border: none;
 }
 
+/* Dijital Teslimat mobile icon — hidden on desktop */
+.nav-teslimat-icon {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--bento-red);
+    color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+}
+.nav-teslimat-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(247,92,76,0.4);
+}
+.nav-teslimat-icon svg { stroke: #fff; }
+
 .mob-menu {
     position: fixed;
     top: 0;
@@ -1337,6 +1356,12 @@ nav.stuck {
     .nav-links,
     .nav-cta-btn {
         display: none;
+    }
+
+    .nav-teslimat-icon {
+        display: flex;
+        margin-left: auto;
+        margin-right: 12px;
     }
 
     .logo-full{display:none}
