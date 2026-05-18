@@ -593,9 +593,10 @@
 
         openLightbox(startPhotoId) {
             const elements = currentSchool.photos.map(p => ({
-                href: PHOTO_BASE_URL + currentSchool.basePath + p.original,
+                href: PHOTO_BASE_URL + currentSchool.basePath + p.thumb, // Use low-res for fast viewing
                 type: 'image',
                 photoId: p.id,
+                originalUrl: PHOTO_BASE_URL + currentSchool.basePath + p.original,
                 thumbUrl: PHOTO_BASE_URL + currentSchool.basePath + p.thumb
             }));
             const startIndex = currentSchool.photos.findIndex(p => p.id === startPhotoId);
@@ -604,7 +605,7 @@
             
             const firstSlide = elements[startIndex];
             activeLightboxPhotoId = firstSlide.photoId;
-            activeLightboxPhotoUrl = firstSlide.href;
+            activeLightboxPhotoUrl = firstSlide.originalUrl; // Keep original URL for downloading!
             activeLightboxThumbUrl = firstSlide.thumbUrl;
 
             gLightboxInstance = GLightbox({
@@ -614,12 +615,8 @@
                 loop: true
             });
             
-            // Add a custom download button to the lightbox toolbar
-            gLightboxInstance.on('open', () => {
-                ProductBar.init();
-                setTimeout(() => ProductBar.updateMockups(activeLightboxThumbUrl), 100);
-                
-                // Inject custom download button if not exists
+            // Add a custom download button to the lightbox toolbar safely
+            const injectDownloadBtn = () => {
                 const toolbar = document.querySelector('.gtoolbar');
                 if (toolbar && !document.getElementById('gCustomDownloadBtn')) {
                     const dlBtn = document.createElement('button');
@@ -640,24 +637,26 @@
                             a.click();
                             URL.revokeObjectURL(a.href);
                         } catch(e) {
-                            // Fallback
-                            const a = document.createElement('a');
-                            a.href = activeLightboxPhotoUrl;
-                            a.download = filename;
-                            a.target = '_blank';
-                            a.click();
+                            alert("Tarayıcınız güvenlik (CORS) nedeniyle indirmeyi engelledi. Lütfen Cloudflare R2 CORS ayarlarını kontrol edin.");
                         }
                     };
                     toolbar.insertBefore(dlBtn, toolbar.firstChild);
                 }
+            };
+
+            gLightboxInstance.on('open', () => {
+                ProductBar.init();
+                setTimeout(() => ProductBar.updateMockups(activeLightboxThumbUrl), 100);
+                setTimeout(injectDownloadBtn, 300); // Wait for DOM to render
             });
             
             gLightboxInstance.on('slide_changed', ({ current }) => {
                 const slide = elements[current.index];
                 activeLightboxPhotoId = slide.photoId;
-                activeLightboxPhotoUrl = slide.href;
+                activeLightboxPhotoUrl = slide.originalUrl;
                 activeLightboxThumbUrl = slide.thumbUrl;
                 ProductBar.updateMockups(activeLightboxThumbUrl);
+                injectDownloadBtn(); // Ensure button stays there
             });
             
             gLightboxInstance.on('close', () => {
@@ -837,12 +836,9 @@
                         a.click();
                         URL.revokeObjectURL(a.href);
                     } catch (fetchErr) {
-                        console.warn("CORS blocked fetch, falling back to direct link", fetchErr);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = filename;
-                        a.target = '_blank';
-                        a.click();
+                        alert("Tarayıcınız güvenlik (CORS) nedeniyle indirmeyi engelledi. Cloudflare R2 CORS ayarlarınızı yaptığınızdan emin olun.");
+                        status.textContent = 'Hata!';
+                        return;
                     }
                     status.textContent = 'Tamamlandı!';
                     bar.style.width = '100%';
