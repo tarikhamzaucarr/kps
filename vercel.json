@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/photos/:path*",
+      "destination": "https://pub-5675e08d774a4bdf8fbe29c4d965bbca.r2.dev/:path*"
+    }
+  ]
+}

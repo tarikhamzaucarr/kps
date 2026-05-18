@@ -5,7 +5,7 @@
 (function () {
     'use strict';
 
-    const PHOTO_BASE_URL = 'https://pub-5675e08d774a4bdf8fbe29c4d965bbca.r2.dev/';
+    const PHOTO_BASE_URL = '/photos/';
     const FORMSPREE_URL = 'https://formspree.io/f/xvzvlqjg';
 
     // ── SHA-256 Hash Utility (BUG-02: PIN Security) ──
