@@ -140,7 +140,7 @@ def create_thumbnail(src_path, thumb_path, width=THUMB_WIDTH):
 # ══════════════════════════════════════════════
 def scan_and_process(source_dir, school_slug, use_r2=False, r2_client=None, r2_bucket=None):
     """
-    Kaynak klasörden fotoğrafları tarar, thumbnail oluşturur, R2'ye yükler.
+    Kaynak klasörden fotoğrafları (ve alt klasörleri) tarar, thumbnail oluşturur, R2'ye yükler.
     Kaynak klasördeki fotoğrafları assets/photos/okul-slug/ altına kopyalar.
     """
     source_dir = Path(source_dir)
@@ -149,9 +149,9 @@ def scan_and_process(source_dir, school_slug, use_r2=False, r2_client=None, r2_b
     (dest_dir / "originals").mkdir(exist_ok=True)
     (dest_dir / "thumbs").mkdir(exist_ok=True)
 
-    # Fotoğrafları tara
+    # Fotoğrafları tara (Alt klasörler dahil - örn: LR, LR ek)
     photo_files = sorted([
-        f for f in source_dir.iterdir()
+        f for f in source_dir.rglob("*")
         if f.is_file() and f.suffix.lower() in SUPPORTED_EXTS
     ])
 
@@ -160,7 +160,7 @@ def scan_and_process(source_dir, school_slug, use_r2=False, r2_client=None, r2_b
         return []
 
     total = len(photo_files)
-    print(f"  📸 {total} fotoğraf bulundu.\n")
+    print(f"  📸 {total} fotoğraf bulundu (alt klasörler dahil).\n")
 
     photos = []
     r2_upload_queue = []
@@ -176,7 +176,13 @@ def scan_and_process(source_dir, school_slug, use_r2=False, r2_client=None, r2_b
         
         # Dosya adını temizle (boşlukları ve özel karakterleri koru)
         orig_name = photo_file.name
-        thumb_name = photo_file.stem + ".jpg"
+        
+        # Alt klasör varsa çakışmayı önlemek için klasör adını ön ek yapalım
+        if photo_file.parent != source_dir:
+            sub_folder_name = photo_file.parent.name
+            orig_name = f"{sub_folder_name}_{orig_name}"
+            
+        thumb_name = Path(orig_name).stem + ".jpg"
 
         orig_dest = dest_dir / "originals" / orig_name
         thumb_dest = dest_dir / "thumbs" / thumb_name
@@ -269,18 +275,30 @@ def scan_and_process(source_dir, school_slug, use_r2=False, r2_client=None, r2_b
 
 
 # ══════════════════════════════════════════════
-# CONFIG GÜNCELLEME
+# CONFIG GÜNCELLEME (MEVCUT OKULLARI KORUR)
 # ══════════════════════════════════════════════
 def generate_config(schools_data):
-    """teslimat-config.json güncelle"""
-    config = {"schools": schools_data}
+    """teslimat-config.json güncelle (mevcut okulları korur)"""
+    existing_config = {"schools": []}
+    if CONFIG_FILE.exists():
+        try:
+            with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+                existing_config = json.load(f)
+        except Exception as e:
+            print(f"⚠️  Mevcut config okunamadı: {e}")
+
+    schools_dict = {s["slug"]: s for s in existing_config.get("schools", [])}
+    for new_school in schools_data:
+        schools_dict[new_school["slug"]] = new_school
+
+    config = {"schools": list(schools_dict.values())}
     with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
         json.dump(config, f, ensure_ascii=False, indent=2)
     print(f"\n📄 {CONFIG_FILE} güncellendi.")
 
 
 def update_inline_config(schools_data):
-    """teslimat.js INLINE_CONFIG güncelle"""
+    """teslimat.js INLINE_CONFIG güncelle (mevcut okulları korur)"""
     if not JS_FILE.exists():
         return
 
@@ -302,7 +320,17 @@ def update_inline_config(schools_data):
                 json_end = i + 1
                 break
 
-    new_json = json.dumps({"schools": schools_data}, ensure_ascii=False, indent=8)
+    try:
+        existing_config = json.loads(js[json_start:json_end])
+    except Exception as e:
+        existing_config = {"schools": []}
+
+    schools_dict = {s["slug"]: s for s in existing_config.get("schools", [])}
+    for new_school in schools_data:
+        schools_dict[new_school["slug"]] = new_school
+
+    new_config = {"schools": list(schools_dict.values())}
+    new_json = json.dumps(new_config, ensure_ascii=False, indent=8)
     JS_FILE.write_text(js[:json_start] + new_json + js[json_end:], encoding='utf-8')
     print(f"📄 {JS_FILE} INLINE_CONFIG güncellendi.")
 
