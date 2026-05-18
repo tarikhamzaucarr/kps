@@ -28,6 +28,25 @@
                         "veliPin": "nice2026",
                         "adminPin": "admin2026",
                         "basePath": "nicekindergarten/",
+                        "prices": {
+                                "baski-10x15": 24,
+                                "baski-13x18": 30,
+                                "baski-15x21": 42,
+                                "baski-20x30": 75,
+                                "kanvas-30x40": 1080,
+                                "kanvas-50x70": 1350,
+                                "cerceve-21x30": 746,
+                                "mdf-blok": 420,
+                                "kupa": 350,
+                                "sihirli-kupa": 400,
+                                "magnet": 85,
+                                "anahtarlik": 180,
+                                "puzzle": 620,
+                                "takvim": 420,
+                                "kitap-ayraci": 80,
+                                "paket-aile": 1400,
+                                "paket-buyukanne": 1400
+                        },
                         "photos": [
                                 {
                                         "id": "IMG_0001",
@@ -4227,29 +4246,29 @@
     // --- PRODUCTS CATALOG ---
     const PRODUCTS = [
         // Kategori 1: Klasik Baskılar
-        { id: 'baski-10x15', category: 'baski', categoryLabel: 'Klasik Baskılar', name: 'Standart Baskı (10×15)', price: 0, mockup: { shape: 'print', wRatio: 1.5, hRatio: 1, padding: 5, bgColor: '#fff', frameColor: '#eee' } },
-        { id: 'baski-13x18', category: 'baski', categoryLabel: 'Klasik Baskılar', name: 'Orta Baskı (13×18)', price: 0, mockup: { shape: 'print', wRatio: 1.4, hRatio: 1, padding: 5, bgColor: '#fff', frameColor: '#eee' } },
-        { id: 'baski-15x21', category: 'baski', categoryLabel: 'Klasik Baskılar', name: 'A5 Baskı (15×21)', price: 0, mockup: { shape: 'print', wRatio: 1, hRatio: 1.4, padding: 5, bgColor: '#fff', frameColor: '#eee' } },
-        { id: 'baski-20x30', category: 'baski', categoryLabel: 'Klasik Baskılar', name: 'A4 Baskı (20×30)', price: 0, mockup: { shape: 'print', wRatio: 1, hRatio: 1.5, padding: 5, bgColor: '#fff', frameColor: '#eee' } },
+        { id: 'baski-10x15', category: 'baski', categoryLabel: 'Klasik Baskılar', name: 'Standart Baskı (10×15)', price: 24, mockup: { shape: 'print', wRatio: 1.5, hRatio: 1, padding: 5, bgColor: '#fff', frameColor: '#eee' } },
+        { id: 'baski-13x18', category: 'baski', categoryLabel: 'Klasik Baskılar', name: 'Orta Baskı (13×18)', price: 30, mockup: { shape: 'print', wRatio: 1.4, hRatio: 1, padding: 5, bgColor: '#fff', frameColor: '#eee' } },
+        { id: 'baski-15x21', category: 'baski', categoryLabel: 'Klasik Baskılar', name: 'A5 Baskı (15×21)', price: 42, mockup: { shape: 'print', wRatio: 1, hRatio: 1.4, padding: 5, bgColor: '#fff', frameColor: '#eee' } },
+        { id: 'baski-20x30', category: 'baski', categoryLabel: 'Klasik Baskılar', name: 'A4 Baskı (20×30)', price: 75, mockup: { shape: 'print', wRatio: 1, hRatio: 1.5, padding: 5, bgColor: '#fff', frameColor: '#eee' } },
         
         // Kategori 2: Duvar Sanatı
-        { id: 'kanvas-30x40', category: 'duvar', categoryLabel: 'Duvar Sanatı', name: 'Kanvas Tablo (30×40)', price: 0, mockup: { shape: 'canvas', wRatio: 3, hRatio: 4, padding: 0, frameColor: '#ccc' } },
-        { id: 'kanvas-50x70', category: 'duvar', categoryLabel: 'Duvar Sanatı', name: 'Kanvas Tablo (50×70)', price: 0, mockup: { shape: 'canvas', wRatio: 5, hRatio: 7, padding: 0, frameColor: '#ccc' } },
-        { id: 'cerceve-21x30', category: 'duvar', categoryLabel: 'Duvar Sanatı', name: 'Ahşap Çerçeveli (21×30)', price: 0, mockup: { shape: 'rect', wRatio: 2.1, hRatio: 3, padding: 10, bgColor: '#fff', frameColor: '#8b5a2b' } },
-        { id: 'mdf-blok', category: 'duvar', categoryLabel: 'Duvar Sanatı', name: 'MDF Blok Baskı', price: 0, mockup: { shape: 'mdf', wRatio: 1, hRatio: 1.2, padding: 0, frameColor: '#444' } },
+        { id: 'kanvas-30x40', category: 'duvar', categoryLabel: 'Duvar Sanatı', name: 'Kanvas Tablo (30×40)', price: 1080, mockup: { shape: 'canvas', wRatio: 3, hRatio: 4, padding: 0, frameColor: '#ccc' } },
+        { id: 'kanvas-50x70', category: 'duvar', categoryLabel: 'Duvar Sanatı', name: 'Kanvas Tablo (50×70)', price: 1350, mockup: { shape: 'canvas', wRatio: 5, hRatio: 7, padding: 0, frameColor: '#ccc' } },
+        { id: 'cerceve-21x30', category: 'duvar', categoryLabel: 'Duvar Sanatı', name: 'Ahşap Çerçeveli (21×30)', price: 746, mockup: { shape: 'rect', wRatio: 2.1, hRatio: 3, padding: 10, bgColor: '#fff', frameColor: '#8b5a2b' } },
+        { id: 'mdf-blok', category: 'duvar', categoryLabel: 'Duvar Sanatı', name: 'MDF Blok Baskı', price: 420, mockup: { shape: 'mdf', wRatio: 1, hRatio: 1.2, padding: 0, frameColor: '#444' } },
 
         // Kategori 3: Hediyelik
-        { id: 'kupa', category: 'hediye', categoryLabel: 'Hediyelik', name: 'Fotoğraflı Kupa', price: 0, mockup: { shape: 'mug', wRatio: 1, hRatio: 1.2, bgColor: '#fff' } },
-        { id: 'sihirli-kupa', category: 'hediye', categoryLabel: 'Hediyelik', name: 'Sihirli Kupa', price: 0, mockup: { shape: 'mug', wRatio: 1, hRatio: 1.2, bgColor: '#333' } },
-        { id: 'magnet', category: 'hediye', categoryLabel: 'Hediyelik', name: 'Buzdolabı Magneti', price: 0, mockup: { shape: 'magnet', wRatio: 1, hRatio: 1.4, padding: 2, bgColor: '#fff', frameColor: '#ddd' } },
-        { id: 'anahtarlik', category: 'hediye', categoryLabel: 'Hediyelik', name: 'Akrilik Anahtarlık', price: 0, mockup: { shape: 'keychain', wRatio: 1, hRatio: 1, padding: 2, frameColor: '#ccc' } },
-        { id: 'puzzle', category: 'hediye', categoryLabel: 'Hediyelik', name: 'Fotoğraflı Yapboz', price: 0, mockup: { shape: 'puzzle', wRatio: 4, hRatio: 3, padding: 0 } },
+        { id: 'kupa', category: 'hediye', categoryLabel: 'Hediyelik', name: 'Fotoğraflı Kupa', price: 350, mockup: { shape: 'mug', wRatio: 1, hRatio: 1.2, bgColor: '#fff' } },
+        { id: 'sihirli-kupa', category: 'hediye', categoryLabel: 'Hediyelik', name: 'Sihirli Kupa', price: 400, mockup: { shape: 'mug', wRatio: 1, hRatio: 1.2, bgColor: '#333' } },
+        { id: 'magnet', category: 'hediye', categoryLabel: 'Hediyelik', name: 'Buzdolabı Magneti', price: 85, mockup: { shape: 'magnet', wRatio: 1, hRatio: 1.4, padding: 2, bgColor: '#fff', frameColor: '#ddd' } },
+        { id: 'anahtarlik', category: 'hediye', categoryLabel: 'Hediyelik', name: 'Akrilik Anahtarlık', price: 180, mockup: { shape: 'keychain', wRatio: 1, hRatio: 1, padding: 2, frameColor: '#ccc' } },
+        { id: 'puzzle', category: 'hediye', categoryLabel: 'Hediyelik', name: 'Fotoğraflı Yapboz', price: 620, mockup: { shape: 'puzzle', wRatio: 4, hRatio: 3, padding: 0 } },
 
         // Kategori 4: Kırtasiye & Paketler
-        { id: 'takvim', category: 'kirtasiye', categoryLabel: 'Paketler', name: 'Masa Takvimi', price: 0, mockup: { shape: 'calendar', wRatio: 1.5, hRatio: 1, bgColor: '#fff' } },
-        { id: 'kitap-ayraci', category: 'kirtasiye', categoryLabel: 'Paketler', name: 'Kitap Ayracı', price: 0, mockup: { shape: 'bookmark', wRatio: 1, hRatio: 3, padding: 2, bgColor: '#fff' } },
-        { id: 'paket-aile', category: 'kirtasiye', categoryLabel: 'Paketler', name: 'Aile Paketi', price: 0, mockup: { shape: 'bundle', text: 'Aile Paketi' } },
-        { id: 'paket-buyukanne', category: 'kirtasiye', categoryLabel: 'Paketler', name: 'Büyükanne Paketi', price: 0, mockup: { shape: 'bundle', text: 'Büyükanne Pkt.' } }
+        { id: 'takvim', category: 'kirtasiye', categoryLabel: 'Paketler', name: 'Masa Takvimi', price: 420, mockup: { shape: 'calendar', wRatio: 1.5, hRatio: 1, bgColor: '#fff' } },
+        { id: 'kitap-ayraci', category: 'kirtasiye', categoryLabel: 'Paketler', name: 'Kitap Ayracı', price: 80, mockup: { shape: 'bookmark', wRatio: 1, hRatio: 3, padding: 2, bgColor: '#fff' } },
+        { id: 'paket-aile', category: 'kirtasiye', categoryLabel: 'Paketler', name: 'Aile Paketi', price: 1400, mockup: { shape: 'bundle', text: 'Aile Paketi' } },
+        { id: 'paket-buyukanne', category: 'kirtasiye', categoryLabel: 'Paketler', name: 'Büyükanne Paketi', price: 1400, mockup: { shape: 'bundle', text: 'Büyükanne Pkt.' } }
     ];
 
     const CAT_ICONS = {
@@ -4893,9 +4912,27 @@
     const PriceManager = {
         KEY: () => `kps_prices_${currentSchool.slug}`,
         load() {
-            try { const p = JSON.parse(localStorage.getItem(this.KEY())); if(p) PRODUCTS.forEach(pr => { if(p[pr.id]!==undefined) pr.price=p[pr.id]; }); } catch(e){}
+            if (currentSchool && currentSchool.prices) {
+                PRODUCTS.forEach(pr => {
+                    if (currentSchool.prices[pr.id] !== undefined) {
+                        pr.price = currentSchool.prices[pr.id];
+                    }
+                });
+            }
+            try {
+                const p = JSON.parse(localStorage.getItem(this.KEY()));
+                if (p) {
+                    PRODUCTS.forEach(pr => {
+                        if (p[pr.id] !== undefined) pr.price = p[pr.id];
+                    });
+                }
+            } catch(e){}
         },
-        save() { const p={}; PRODUCTS.forEach(pr => p[pr.id]=pr.price); localStorage.setItem(this.KEY(), JSON.stringify(p)); }
+        save() {
+            const p = {};
+            PRODUCTS.forEach(pr => p[pr.id] = pr.price);
+            localStorage.setItem(this.KEY(), JSON.stringify(p));
+        }
     };
     const OrderTracker = {
         KEY: () => `kps_orders_${currentSchool.slug}`,

@@ -6,6 +6,25 @@
       "veliPin": "nice2026",
       "adminPin": "admin2026",
       "basePath": "nicekindergarten/",
+      "prices": {
+        "baski-10x15": 24,
+        "baski-13x18": 30,
+        "baski-15x21": 42,
+        "baski-20x30": 75,
+        "kanvas-30x40": 1080,
+        "kanvas-50x70": 1350,
+        "cerceve-21x30": 746,
+        "mdf-blok": 420,
+        "kupa": 350,
+        "sihirli-kupa": 400,
+        "magnet": 85,
+        "anahtarlik": 180,
+        "puzzle": 620,
+        "takvim": 420,
+        "kitap-ayraci": 80,
+        "paket-aile": 1400,
+        "paket-buyukanne": 1400
+      },
       "photos": [
         {
           "id": "IMG_0001",
