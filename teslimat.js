@@ -617,13 +617,12 @@
             
             // Add a custom download button to the lightbox toolbar safely
             const injectDownloadBtn = () => {
-                const toolbar = document.querySelector('.glightbox-window') || document.body;
                 if (!document.getElementById('gCustomDownloadBtn')) {
                     const dlBtn = document.createElement('button');
                     dlBtn.id = 'gCustomDownloadBtn';
-                    // Maksimum görünürlük için özel CSS
-                    dlBtn.style.cssText = 'position:fixed; top:20px; right:80px; z-index:9999999; background:var(--bento-blue); color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:bold; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3); display:flex; align-items:center; gap:8px; font-size:14px;';
-                    dlBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> İndir`;
+                    // Sol üst köşe — fotoğrafın ve sidebar'ın altında kalmaz
+                    dlBtn.style.cssText = 'position:fixed; bottom:30px; left:50%; transform:translateX(-50%); z-index:2147483647; background:#3b82f6; color:#fff; border:none; padding:12px 28px; border-radius:50px; font-weight:700; cursor:pointer; box-shadow:0 6px 20px rgba(59,130,246,0.5); display:flex; align-items:center; gap:10px; font-size:15px; font-family:Outfit,sans-serif; letter-spacing:0.3px;';
+                    dlBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> İndir`;
                     dlBtn.onclick = async () => {
                         if(!activeLightboxPhotoUrl) return;
                         const filename = activeLightboxPhotoUrl.split('/').pop() || 'fotograf.jpg';
@@ -642,9 +641,9 @@
                         } catch(e) {
                             alert("Tarayıcınız güvenlik (CORS) nedeniyle indirmeyi engelledi. Lütfen R2 CORS ayarlarını yapın.");
                         }
-                        dlBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> İndir`;
+                        dlBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> İndir`;
                     };
-                    toolbar.appendChild(dlBtn);
+                    document.body.appendChild(dlBtn);
                 } else {
                     document.getElementById('gCustomDownloadBtn').style.display = 'flex';
                 }

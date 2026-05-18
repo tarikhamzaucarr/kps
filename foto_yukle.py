@@ -1,30 +1,17 @@
 #!/usr/bin/env python3
 """
-Kindergarten Photo Studio — Fotoğraf Yönetim & R2 Yükleme Aracı
-================================================================
-
-BU SCRIPT ÜÇ ŞEY YAPAR:
-  1. Çocuk klasörlerindeki fotoğrafları tarar
-  2. Otomatik thumbnail oluşturur (macOS sips ile)
-  3. Cloudflare R2'ye yükler (opsiyonel)
-  4. teslimat-config.json ve teslimat.js'i günceller
-
-KLASÖR YAPISI:
-  assets/photos/
-  └── okul-slug/               ← Okul klasörü
-      ├── IMG_001.jpg
-      ├── IMG_002.jpg
-      └── ...
+Kindergarten Photo Studio — Toplu Fotoğraf Yükleme Aracı v2
+=============================================================
 
 KULLANIM:
-  # 1) Sadece lokal (thumbnail oluştur + config güncelle)
-  python3 foto_yukle.py
+  # Dış klasörden fotoğraf al, thumbnail oluştur + R2'ye yükle:
+  python3 foto_yukle.py --kaynak "/Users/tarikhamzaucar/Desktop/Nice Kindergarten/LR" --okul nicekindergarten --r2
 
-  # 2) R2'ye yükle (önce .env dosyasını doldurun)
+  # Sadece thumbnail oluştur (R2 yükleme olmadan):
+  python3 foto_yukle.py --kaynak "/path/to/photos" --okul okul-slug
+
+  # Mevcut assets/photos/ klasöründen (eski davranış):
   python3 foto_yukle.py --r2
-
-  # 3) Belirli bir okul
-  python3 foto_yukle.py --okul gunes-anaokulu
 
 GEREKSINIMLER:
   - macOS (sips komutu)
@@ -38,6 +25,8 @@ import subprocess
 import shutil
 import argparse
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import time
 
 # ── Config ──
 PHOTOS_DIR = Path("assets/photos")
@@ -46,6 +35,7 @@ JS_FILE = Path("teslimat.js")
 ENV_FILE = Path(".env")
 THUMB_WIDTH = 400
 SUPPORTED_EXTS = {'.jpg', '.jpeg', '.png', '.webp', '.tiff', '.bmp', '.heic'}
+R2_PARALLEL_UPLOADS = 10  # Paralel yükleme sayısı
 
 
 # ══════════════════════════════════════════════
@@ -93,12 +83,12 @@ def get_r2_client(env):
 
 def upload_to_r2(client, bucket, local_path, r2_key):
     """Dosyayı R2'ye yükle"""
-    content_type = 'image/webp'
-    ext = local_path.suffix.lower()
-    if ext in {'.jpg', '.jpeg'}:
-        content_type = 'image/jpeg'
-    elif ext == '.png':
+    content_type = 'image/jpeg'
+    ext = Path(local_path).suffix.lower()
+    if ext == '.png':
         content_type = 'image/png'
+    elif ext == '.webp':
+        content_type = 'image/webp'
 
     client.upload_file(
         str(local_path),
@@ -108,70 +98,106 @@ def upload_to_r2(client, bucket, local_path, r2_key):
     )
 
 
+def r2_key_exists(client, bucket, key):
+    """R2'de dosya var mı kontrol et"""
+    try:
+        client.head_object(Bucket=bucket, Key=key)
+        return True
+    except:
+        return False
+
+
 # ══════════════════════════════════════════════
 # THUMBNAIL OLUŞTURMA (macOS sips)
 # ══════════════════════════════════════════════
 def create_thumbnail(src_path, thumb_path, width=THUMB_WIDTH):
     """macOS sips ile thumbnail oluştur (Daima JPEG çıktı verir)"""
     thumb_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    # HEIC/TIFF gibi formatlar varsa önce JPEG'e çevir
+    src_path = Path(src_path)
+    if src_path.suffix.lower() in {'.heic', '.tiff', '.bmp'}:
+        temp = thumb_path.with_suffix('.jpg')
+        subprocess.run([
+            "sips", "-s", "format", "jpeg",
+            str(src_path), "--out", str(temp)
+        ], capture_output=True)
+        src_path = temp
+
     subprocess.run([
-        "sips", 
-        "-s", "format", "jpeg", 
-        "--setProperty", "formatOptions", "80", 
-        "--resampleWidth", str(width), 
-        str(src_path), 
+        "sips",
+        "-s", "format", "jpeg",
+        "--setProperty", "formatOptions", "80",
+        "--resampleWidth", str(width),
+        str(src_path),
         "--out", str(thumb_path)
     ], capture_output=True)
 
 
-def copy_to_originals(src_path, orig_path):
-    """Orijinal fotoğrafı originals/ klasörüne kopyala"""
-    orig_path.parent.mkdir(parents=True, exist_ok=True)
-    if not orig_path.exists():
-        shutil.copy2(src_path, orig_path)
-
-
 # ══════════════════════════════════════════════
-# OKUL TARAMA
+# OKUL TARAMA — DIŞARIDAN KLASÖR DESTEĞİ
 # ══════════════════════════════════════════════
-def scan_school(school_dir, use_r2=False, r2_client=None, r2_bucket=None):
-    """Bir okul klasörünü tara, thumbnail oluştur, opsiyonel R2 yükle"""
-    photos = []
-    
-    photo_files = sorted([f for f in school_dir.iterdir()
-                          if f.is_file() and f.suffix.lower() in SUPPORTED_EXTS])
+def scan_and_process(source_dir, school_slug, use_r2=False, r2_client=None, r2_bucket=None):
+    """
+    Kaynak klasörden fotoğrafları tarar, thumbnail oluşturur, R2'ye yükler.
+    Kaynak klasördeki fotoğrafları assets/photos/okul-slug/ altına kopyalar.
+    """
+    source_dir = Path(source_dir)
+    dest_dir = PHOTOS_DIR / school_slug
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    (dest_dir / "originals").mkdir(exist_ok=True)
+    (dest_dir / "thumbs").mkdir(exist_ok=True)
+
+    # Fotoğrafları tara
+    photo_files = sorted([
+        f for f in source_dir.iterdir()
+        if f.is_file() and f.suffix.lower() in SUPPORTED_EXTS
+    ])
 
     if not photo_files:
-        print(f"  ⚠️  {school_dir.name}: Fotoğraf yok, atlanıyor.")
-        return photos
+        print(f"  ⚠️  {source_dir}: Fotoğraf yok!")
+        return []
 
+    total = len(photo_files)
+    print(f"  📸 {total} fotoğraf bulundu.\n")
+
+    photos = []
+    r2_upload_queue = []
+
+    # ── ADIM 1: Thumbnail oluşturma ──
+    print("  ─── ADIM 1/3: Thumbnail Oluşturma ───")
+    start_time = time.time()
+    created = 0
+    skipped = 0
+    
     for pidx, photo_file in enumerate(photo_files, 1):
         photo_id = f"IMG_{pidx:04d}"
-        thumb_name = f"{photo_file.stem}.jpg"
+        
+        # Dosya adını temizle (boşlukları ve özel karakterleri koru)
         orig_name = photo_file.name
+        thumb_name = photo_file.stem + ".jpg"
 
-        orig_dest = school_dir / "originals" / orig_name
-        thumb_dest = school_dir / "thumbs" / thumb_name
+        orig_dest = dest_dir / "originals" / orig_name
+        thumb_dest = dest_dir / "thumbs" / thumb_name
 
         # Orijinali kopyala
-        copy_to_originals(photo_file, orig_dest)
+        if not orig_dest.exists():
+            shutil.copy2(photo_file, orig_dest)
 
         # Thumbnail oluştur
         if not thumb_dest.exists():
-            print(f"    📸 Thumbnail: {photo_file.name}")
             create_thumbnail(photo_file, thumb_dest)
+            created += 1
+        else:
+            skipped += 1
 
-        # R2'ye yükle
-        if use_r2 and r2_client:
-            school_slug = school_dir.name
-            r2_orig_key = f"{school_slug}/originals/{orig_name}"
-            r2_thumb_key = f"{school_slug}/thumbs/{thumb_name}"
-            try:
-                print(f"    ☁️  R2 yükleniyor: {orig_name}")
-                upload_to_r2(r2_client, r2_bucket, orig_dest, r2_orig_key)
-                upload_to_r2(r2_client, r2_bucket, thumb_dest, r2_thumb_key)
-            except Exception as e:
-                print(f"    ❌ R2 yükleme hatası: {e}")
+        # İlerleme göster
+        pct = int(pidx / total * 100)
+        if pidx % 50 == 0 or pidx == total:
+            elapsed = time.time() - start_time
+            speed = pidx / elapsed if elapsed > 0 else 0
+            remaining = (total - pidx) / speed if speed > 0 else 0
+            print(f"    [{pct:3d}%] {pidx}/{total}  ({speed:.1f} foto/s, kalan: {remaining:.0f}s)")
 
         photos.append({
             "id": photo_id,
@@ -179,8 +205,65 @@ def scan_school(school_dir, use_r2=False, r2_client=None, r2_bucket=None):
             "original": f"originals/{orig_name}"
         })
 
-    print(f"  ✅ {len(photos)} fotoğraf bulundu ve işlendi.")
+        if use_r2 and r2_client:
+            r2_upload_queue.append({
+                "orig_local": str(orig_dest),
+                "orig_key": f"{school_slug}/originals/{orig_name}",
+                "thumb_local": str(thumb_dest),
+                "thumb_key": f"{school_slug}/thumbs/{thumb_name}"
+            })
 
+    print(f"  ✅ Thumbnail: {created} oluşturuldu, {skipped} zaten vardı.\n")
+
+    # ── ADIM 2: R2 Yükleme ──
+    if use_r2 and r2_client and r2_upload_queue:
+        print("  ─── ADIM 2/3: R2 Yükleme ───")
+        start_time = time.time()
+        uploaded = 0
+        r2_skipped = 0
+        failed = 0
+
+        def upload_pair(item):
+            """Tek bir fotoğraf + thumbnail çiftini yükle"""
+            results = {"uploaded": 0, "skipped": 0, "failed": 0}
+            for local, key in [(item["orig_local"], item["orig_key"]), 
+                               (item["thumb_local"], item["thumb_key"])]:
+                try:
+                    if r2_key_exists(r2_client, r2_bucket, key):
+                        results["skipped"] += 1
+                    else:
+                        upload_to_r2(r2_client, r2_bucket, local, key)
+                        results["uploaded"] += 1
+                except Exception as e:
+                    results["failed"] += 1
+                    print(f"    ❌ {key}: {e}")
+            return results
+
+        with ThreadPoolExecutor(max_workers=R2_PARALLEL_UPLOADS) as executor:
+            futures = {executor.submit(upload_pair, item): i 
+                      for i, item in enumerate(r2_upload_queue)}
+            
+            for done_count, future in enumerate(as_completed(futures), 1):
+                result = future.result()
+                uploaded += result["uploaded"]
+                r2_skipped += result["skipped"]
+                failed += result["failed"]
+                
+                if done_count % 25 == 0 or done_count == len(futures):
+                    pct = int(done_count / len(futures) * 100)
+                    elapsed = time.time() - start_time
+                    speed = done_count / elapsed if elapsed > 0 else 0
+                    remaining = (len(futures) - done_count) / speed if speed > 0 else 0
+                    print(f"    [{pct:3d}%] {done_count}/{len(futures)} çift  "
+                          f"(☁️ {uploaded} yüklendi, ⏭️ {r2_skipped} atlandı, ❌ {failed} hata, "
+                          f"kalan: {remaining:.0f}s)")
+
+        print(f"  ✅ R2: {uploaded} dosya yüklendi, {r2_skipped} zaten vardı, {failed} hata.\n")
+    else:
+        print("  ⏭️  R2 yükleme atlandı (--r2 parametresi verilmedi).\n")
+
+    # ── ADIM 3: Config güncelleme ──
+    print(f"  ✅ Toplam: {len(photos)} fotoğraf işlendi.")
     return photos
 
 
@@ -223,41 +306,31 @@ def update_inline_config(schools_data):
     print(f"📄 {JS_FILE} INLINE_CONFIG güncellendi.")
 
 
-def update_photo_base_url(r2_public_url):
-    """teslimat.js'deki PHOTO_BASE_URL'yi R2 URL'si ile değiştir"""
-    if not JS_FILE.exists():
-        return
-    js = JS_FILE.read_text(encoding='utf-8')
-    old = "const PHOTO_BASE_URL = './assets/photos/';"
-    new = f"const PHOTO_BASE_URL = '{r2_public_url}';"
-    if old in js:
-        JS_FILE.write_text(js.replace(old, new), encoding='utf-8')
-        print(f"📄 PHOTO_BASE_URL → {r2_public_url}")
-
-
 # ══════════════════════════════════════════════
 # MAIN
 # ══════════════════════════════════════════════
 def main():
-    parser = argparse.ArgumentParser(description='Fotoğraf Yönetim Aracı')
+    parser = argparse.ArgumentParser(description='Fotoğraf Yönetim Aracı v2')
     parser.add_argument('--r2', action='store_true', help='Cloudflare R2 ye yükle')
-    parser.add_argument('--okul', type=str, help='Belirli bir okul slug')
+    parser.add_argument('--okul', type=str, help='Okul slug (örn: nicekindergarten)')
+    parser.add_argument('--kaynak', type=str, help='Fotoğraf kaynak klasörü (dış klasör)')
+    parser.add_argument('--pin', type=str, default='1234', help='Veli PIN (varsayılan: 1234)')
+    parser.add_argument('--admin', type=str, default='admin2026', help='Admin şifresi')
+    parser.add_argument('--workers', type=int, default=10, help='Paralel R2 yükleme sayısı')
     args = parser.parse_args()
 
-    print("=" * 55)
-    print("  📸 Kindergarten Photo Studio")
-    print("  Fotoğraf Yönetim & R2 Yükleme Aracı")
-    print("=" * 55)
+    global R2_PARALLEL_UPLOADS
+    R2_PARALLEL_UPLOADS = args.workers
+
+    print("=" * 60)
+    print("  📸 Kindergarten Photo Studio — Toplu Yükleme v2")
+    print("=" * 60)
 
     if not shutil.which("sips"):
         print("❌ 'sips' bulunamadı. macOS gerektirir.")
         sys.exit(1)
 
-    if not PHOTOS_DIR.exists():
-        PHOTOS_DIR.mkdir(parents=True)
-        print(f"📁 {PHOTOS_DIR} klasörü oluşturuldu.")
-        print(f"   Okul klasörlerini buraya ekleyin.")
-        sys.exit(0)
+    PHOTOS_DIR.mkdir(parents=True, exist_ok=True)
 
     # R2 client
     r2_client, r2_bucket = None, None
@@ -266,66 +339,74 @@ def main():
         r2_client, r2_bucket = get_r2_client(env)
         print(f"☁️  R2 Bucket: {r2_bucket}")
 
-    # Okul klasörlerini tara
-    if args.okul:
-        school_dirs = [PHOTOS_DIR / args.okul]
-        if not school_dirs[0].exists():
-            print(f"❌ {school_dirs[0]} bulunamadı.")
+    # Kaynak klasörden mi yoksa mevcut assets/photos/ dan mı?
+    if args.kaynak:
+        if not args.okul:
+            print("❌ --kaynak kullanırken --okul parametresi de gerekli.")
+            print("   Örnek: python3 foto_yukle.py --kaynak '/path/to/photos' --okul nicekindergarten --r2")
             sys.exit(1)
-    else:
-        school_dirs = sorted([d for d in PHOTOS_DIR.iterdir() if d.is_dir()])
+        
+        source = Path(args.kaynak)
+        if not source.exists():
+            print(f"❌ Kaynak klasör bulunamadı: {source}")
+            sys.exit(1)
 
-    all_schools = []
-
-    for school_dir in school_dirs:
-        school_slug = school_dir.name
+        school_slug = args.okul
         school_name = school_slug.replace("-", " ").replace("_", " ").title()
-
+        
         print(f"\n🏫 {school_name} ({school_slug})")
-        print("-" * 40)
+        print(f"📂 Kaynak: {source}")
+        print("-" * 60)
 
-        photos = scan_school(school_dir, args.r2, r2_client, r2_bucket)
+        photos = scan_and_process(source, school_slug, args.r2, r2_client, r2_bucket)
 
-        if not photos:
-            print(f"  ⚠️  Fotoğraf bulunamadı.")
-            print(f"  Kullanım: {school_dir}/ altına fotoğrafları koyun.")
-            continue
+        if photos:
+            all_schools = [{
+                "slug": school_slug,
+                "name": school_name,
+                "veliPin": args.pin,
+                "adminPin": args.admin,
+                "basePath": f"{school_slug}/",
+                "photos": photos
+            }]
+            generate_config(all_schools)
+            update_inline_config(all_schools)
+    else:
+        # Eski davranış — assets/photos/ içindeki klasörleri tara
+        if args.okul:
+            school_dirs = [PHOTOS_DIR / args.okul]
+            if not school_dirs[0].exists():
+                print(f"❌ {school_dirs[0]} bulunamadı.")
+                sys.exit(1)
+        else:
+            school_dirs = sorted([d for d in PHOTOS_DIR.iterdir() if d.is_dir()])
 
-        # PIN'leri sor
-        try:
-            veli_pin = input(f"  Veli PIN (varsayılan 1234): ").strip() or "1234"
-            admin_pin = input(f"  Admin şifresi (varsayılan admin2026): ").strip() or "admin2026"
-        except EOFError:
-            veli_pin, admin_pin = "1234", "admin2026"
+        all_schools = []
+        for school_dir in school_dirs:
+            school_slug = school_dir.name
+            school_name = school_slug.replace("-", " ").replace("_", " ").title()
+            
+            print(f"\n🏫 {school_name} ({school_slug})")
+            print("-" * 60)
 
-        all_schools.append({
-            "slug": school_slug,
-            "name": school_name,
-            "veliPin": veli_pin,
-            "adminPin": admin_pin,
-            "basePath": f"{school_slug}/",
-            "photos": photos
-        })
+            photos = scan_and_process(school_dir, school_slug, args.r2, r2_client, r2_bucket)
+            if photos:
+                all_schools.append({
+                    "slug": school_slug,
+                    "name": school_name,
+                    "veliPin": args.pin,
+                    "adminPin": args.admin,
+                    "basePath": f"{school_slug}/",
+                    "photos": photos
+                })
 
-    if all_schools:
-        generate_config(all_schools)
-        update_inline_config(all_schools)
+        if all_schools:
+            generate_config(all_schools)
+            update_inline_config(all_schools)
 
-        if args.r2:
-            env = load_env()
-            public_url = env.get('R2_PUBLIC_URL', '')
-            if public_url:
-                update_photo_base_url(public_url)
-
-        print("\n" + "=" * 55)
-        print("✅ TAMAMLANDI!")
-        print("=" * 55)
-        for school in all_schools:
-            print(f"\n  🏫 {school['name']}")
-            print(f"     Veli PIN: {school['veliPin']}")
-            print(f"     Admin: {school['adminPin']}")
-            print(f"     URL: teslimat.html?okul={school['slug']}")
-            print(f"     📸 {len(school['photos'])} fotoğraf")
+    print("\n" + "=" * 60)
+    print("✅ TAMAMLANDI!")
+    print("=" * 60)
 
 
 if __name__ == "__main__":
