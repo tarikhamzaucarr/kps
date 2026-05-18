@@ -4039,6 +4039,11 @@
                 if (!schoolSlug && data.schools.length === 1) {
                     currentSchool = data.schools[0];
                     AdminData.load();
+
+                    // ── Session Restore: check if already logged in ──
+                    const saved = this._restoreSession();
+                    if (saved) return;
+
                     document.getElementById('authSchoolName').textContent = currentSchool.name;
                     this.setupListeners();
                     return;
@@ -4059,9 +4064,47 @@
                 // Apply admin mods from localStorage
                 AdminData.load();
 
+                // ── Session Restore: check if already logged in ──
+                const saved = this._restoreSession();
+                if (saved) return;
+
                 document.getElementById('authSchoolName').textContent = school.name;
                 this.setupListeners();
             }).catch(err => this.showError(err.message));
+        },
+
+        // ── Session Persistence ──
+        _saveSession(role) {
+            try {
+                sessionStorage.setItem('kps_session', JSON.stringify({
+                    slug: currentSchool.slug,
+                    role: role,
+                    ts: Date.now()
+                }));
+            } catch(e) {}
+        },
+
+        _restoreSession() {
+            try {
+                const raw = sessionStorage.getItem('kps_session');
+                if (!raw) return false;
+                const session = JSON.parse(raw);
+                // Only restore if same school and session is less than 4 hours old
+                if (session.slug === currentSchool.slug && (Date.now() - session.ts) < 4 * 60 * 60 * 1000) {
+                    currentRole = session.role;
+                    document.getElementById('teslimatAuth').classList.add('hidden');
+                    document.getElementById('teslimatMain').classList.remove('hidden');
+                    if (currentRole === 'admin') {
+                        document.title = `Admin — ${currentSchool.name} | KPS`;
+                        AdminPanel.render();
+                    } else {
+                        document.title = `${currentSchool.name} Fotoğraflar | KPS`;
+                        PhotoViewer.open();
+                    }
+                    return true;
+                }
+            } catch(e) {}
+            return false;
         },
 
         showError(msg) {
@@ -4136,6 +4179,7 @@
                 const pin = document.getElementById('authPinInput').value;
                 if (await pinMatch(pin, currentSchool.veliPin)) {
                     currentRole = 'veli';
+                    this._saveSession('veli');
                     document.getElementById('teslimatAuth').classList.add('hidden');
                     document.getElementById('teslimatMain').classList.remove('hidden');
                     document.title = `${currentSchool.name} Fotoğraflar | KPS`;
@@ -4148,6 +4192,7 @@
                 const pass = document.getElementById('authPassInput').value;
                 if (await pinMatch(pass, currentSchool.adminPin)) {
                     currentRole = 'admin';
+                    this._saveSession('admin');
                     document.getElementById('teslimatAuth').classList.add('hidden');
                     document.getElementById('teslimatMain').classList.remove('hidden');
                     document.title = `Admin — ${currentSchool.name} | KPS`;

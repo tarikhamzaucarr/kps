@@ -212,7 +212,7 @@
 }
 .strip-toggle:hover { color: #fff; }
 
-/* GLightbox: fotoğraf strip'in üstünde kalır */
+/* GLightbox: fotoğraf bar'ın üstünde kalır */
 body.glightbox-open .gslide-media { max-height: calc(100vh - 80px) !important; }
 body.glightbox-open .gslide-media img {
     max-height: calc(100vh - 80px) !important; object-fit: contain;
@@ -220,6 +220,18 @@ body.glightbox-open .gslide-media img {
 body.glightbox-open.strip-hidden .gslide-media,
 body.glightbox-open.strip-hidden .gslide-media img {
     max-height: calc(100vh - 10px) !important;
+}
+/* When product bar is open on mobile, shrink photo to top half */
+@media(max-width: 768px) {
+    body.shop-bar-active .gslide-media,
+    body.shop-bar-active .gslide-media img {
+        max-height: 55vh !important;
+        object-fit: contain;
+    }
+    body.shop-bar-active .gslide-inner {
+        align-items: flex-start !important;
+        padding-top: 40px;
+    }
 }
 
 /* ── PRODUCT DETAIL MODAL ── */
@@ -582,9 +594,15 @@ body.glightbox-open.strip-hidden .gslide-media img {
         top: auto;
         bottom: 0;
         height: auto;
-        max-height: 50vh;
+        max-height: 40vh;
         border-radius: 20px 20px 0 0;
         box-shadow: 0 -5px 25px rgba(0,0,0,0.15);
+    }
+    .shop-bar-wrapper .shop-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 0 12px 10px 12px;
     }
     body.shop-bar-active .ginner-container { margin-right: 0 !important; }
     body.shop-bar-active .gslide-media img { max-width: 100vw !important; }
