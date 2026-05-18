@@ -451,6 +451,7 @@
                         <span style="color:var(--text-light);font-size:13px;font-weight:600;">${currentSchool.photos.length} fotoğraf</span>
                     </div>
                     <div class="toolbar-right">
+                        <button class="btn-ghost" id="downloadAllBtn" style="font-size:12px;padding:7px 14px; margin-right: 6px;">Tümünü İndir</button>
                         <button class="btn-ghost" id="toggleSelectModeBtn" style="font-size:12px;padding:7px 14px; font-weight:bold;">Seç</button>
                         <button class="btn-ghost" id="selectAllPhotosBtn" style="font-size:12px;padding:7px 14px; display:none;">Tümünü Seç</button>
                     </div>
@@ -493,6 +494,14 @@
                         e.target.textContent = 'Seçimi Temizle';
                     }
                     this.updateButtons();
+                });
+                
+                const downloadAllBtn = document.getElementById('downloadAllBtn');
+                downloadAllBtn.addEventListener('click', () => {
+                    selectedPhotos.clear();
+                    currentSchool.photos.forEach(p => selectedPhotos.add(p.id));
+                    Downloader.downloadSelected();
+                    selectedPhotos.clear();
                 });
             }
             
@@ -605,9 +614,42 @@
                 loop: true
             });
             
+            // Add a custom download button to the lightbox toolbar
             gLightboxInstance.on('open', () => {
                 ProductBar.init();
                 setTimeout(() => ProductBar.updateMockups(activeLightboxThumbUrl), 100);
+                
+                // Inject custom download button if not exists
+                const toolbar = document.querySelector('.gtoolbar');
+                if (toolbar && !document.getElementById('gCustomDownloadBtn')) {
+                    const dlBtn = document.createElement('button');
+                    dlBtn.id = 'gCustomDownloadBtn';
+                    dlBtn.className = 'gbtn';
+                    dlBtn.title = 'İndir';
+                    dlBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`;
+                    dlBtn.onclick = async () => {
+                        if(!activeLightboxPhotoUrl) return;
+                        const filename = activeLightboxPhotoUrl.split('/').pop() || 'fotograf.jpg';
+                        try {
+                            const response = await fetch(activeLightboxPhotoUrl);
+                            if(!response.ok) throw new Error("CORS or Network Error");
+                            const blob = await response.blob();
+                            const a = document.createElement('a');
+                            a.href = URL.createObjectURL(blob);
+                            a.download = filename;
+                            a.click();
+                            URL.revokeObjectURL(a.href);
+                        } catch(e) {
+                            // Fallback
+                            const a = document.createElement('a');
+                            a.href = activeLightboxPhotoUrl;
+                            a.download = filename;
+                            a.target = '_blank';
+                            a.click();
+                        }
+                    };
+                    toolbar.insertBefore(dlBtn, toolbar.firstChild);
+                }
             });
             
             gLightboxInstance.on('slide_changed', ({ current }) => {
@@ -810,20 +852,31 @@
                     const folder = zip.folder(currentSchool.name.replace(/\s+/g, '_'));
                     const photosToDownload = currentSchool.photos.filter(p => selectedPhotos.has(p.id));
 
+                    let zipHasFiles = false;
                     for (const photo of photosToDownload) {
                         const url = PHOTO_BASE_URL + currentSchool.basePath + photo.original;
-                        const response = await fetch(url);
-                        const blob = await response.blob();
-                        const filename = photo.original.split('/').pop() || `${photo.id}.jpg`;
-                        folder.file(filename, blob);
-                        completed++;
-                        status.textContent = `${completed} / ${total}`;
-                        bar.style.width = `${(completed / total) * 100}%`;
+                        try {
+                            const response = await fetch(url);
+                            if(!response.ok) throw new Error("CORS or Network error");
+                            const blob = await response.blob();
+                            const filename = photo.original.split('/').pop() || `${photo.id}.jpg`;
+                            folder.file(filename, blob);
+                            zipHasFiles = true;
+                            completed++;
+                            status.textContent = `${completed} / ${total}`;
+                            bar.style.width = `${(completed / total) * 100}%`;
+                        } catch(e) {
+                            console.warn("Toplu indirme fetch hatası:", e);
+                        }
                     }
 
-                    status.textContent = 'ZIP oluşturuluyor...';
-                    const zipBlob = await zip.generateAsync({ type: 'blob' });
-                    saveAs(zipBlob, `${currentSchool.name.replace(/\s+/g, '_')}_fotograflar.zip`);
+                    if(zipHasFiles) {
+                        status.textContent = 'ZIP oluşturuluyor...';
+                        const zipBlob = await zip.generateAsync({ type: 'blob' });
+                        saveAs(zipBlob, `${currentSchool.name.replace(/\s+/g, '_')}_fotograflar.zip`);
+                    } else {
+                        alert("Tarayıcınız güvenlik (CORS) nedeniyle toplu ZIP oluşturmayı engelledi. Cloudflare R2 CORS ayarlarınızı yaptığınızdan emin olun veya fotoğrafları tek tek indirin.");
+                    }
                 }
                 showToast('İndirme tamamlandı ✓', 'success');
                 DownloadTracker.increment();
