@@ -29,10 +29,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
 
 # ── Config ──
-PHOTOS_DIR = Path("assets/photos")
-CONFIG_FILE = Path("teslimat-config.json")
-JS_FILE = Path("teslimat.js")
-ENV_FILE = Path(".env")
+SCRIPT_DIR = Path(__file__).parent.resolve()
+PHOTOS_DIR = SCRIPT_DIR / "assets" / "photos"
+CONFIG_FILE = SCRIPT_DIR / "teslimat-config.json"
+JS_FILE = SCRIPT_DIR / "teslimat.js"
+ENV_FILE = SCRIPT_DIR / ".env"
 THUMB_WIDTH = 400
 SUPPORTED_EXTS = {'.jpg', '.jpeg', '.png', '.webp', '.tiff', '.bmp', '.heic'}
 R2_PARALLEL_UPLOADS = 10  # Paralel yükleme sayısı
