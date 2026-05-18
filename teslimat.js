@@ -5395,8 +5395,22 @@
             document.getElementById('cartTotalPrice').textContent = `₺${total}`;
             
             const btn = document.getElementById('checkoutBtn');
-            btn.disabled = count === 0;
-            btn.textContent = count === 0 ? 'Sepetiniz Boş' : 'Siparişi Tamamla';
+            if (count === 0) {
+                btn.disabled = true;
+                btn.textContent = 'Sepetiniz Boş';
+                btn.style.background = '';
+                btn.style.color = '';
+            } else if (total < 800) {
+                btn.disabled = true;
+                btn.textContent = `Min. Sipariş 800 ₺ (Kalan: ${800 - total} ₺)`;
+                btn.style.background = '#e74c3c';
+                btn.style.color = '#fff';
+            } else {
+                btn.disabled = false;
+                btn.textContent = 'Siparişi Tamamla';
+                btn.style.background = '';
+                btn.style.color = '';
+            }
         },
         
         renderItems() {
