@@ -399,36 +399,222 @@ body.select-mode-active .photo-btn-t {
 @keyframes toastIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateY(-10px); } }
 
-/* ── RESPONSIVE ── */
+/* ══════════════════════════════════════════════════
+   RESPONSIVE — Mobile-First Overhaul
+   ══════════════════════════════════════════════════ */
+
 @media(max-width: 768px) {
-    .auth-box { padding: 30px 20px; }
-    .auth-box h2 { font-size: 22px; }
-    .auth-input { font-size: 18px; letter-spacing: 6px; }
+
+    /* ── General ── */
+    .teslimat-main { padding-top: 110px; padding-bottom: 80px; }
+
+    /* ── Auth Gate ── */
+    .teslimat-auth { padding: 16px; }
+    .auth-box { padding: 28px 18px; }
+    .auth-box h2 { font-size: 20px; }
+    .auth-box .auth-subtitle { font-size: 13px; margin-bottom: 20px; }
+    .auth-input {
+        font-size: 18px; letter-spacing: 6px;
+        padding: 14px 12px;
+        min-height: 48px; /* touch target */
+    }
+    .auth-input.password-input { font-size: 15px; letter-spacing: 2px; }
     .role-selector { gap: 8px; }
-    .role-card { padding: 14px 10px; }
-    .role-card .role-icon { font-size: 26px; }
-    .folder-header h1 { font-size: 24px; }
-    .folder-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    .child-folder { padding: 22px 14px 16px; }
-    .photo-grid-t { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .role-card {
+        padding: 14px 8px;
+        min-height: 80px; /* touch target */
+    }
+    .role-card .role-icon { font-size: 24px; }
+    .role-card .role-label { font-size: 13px; }
+    .role-card .role-desc { font-size: 10px; }
+    .auth-form { gap: 12px; }
+    .auth-form .btn-main {
+        min-height: 48px;
+        font-size: 15px !important;
+    }
+
+    /* ── Breadcrumb ── */
+    .teslimat-breadcrumb { font-size: 13px; margin-bottom: 16px; gap: 6px; }
+
+    /* ── Photos Toolbar (sticky) ── */
     .photos-toolbar {
-        flex-direction: column; align-items: flex-start;
+        flex-direction: column;
+        align-items: flex-start;
         top: 70px;
         padding-top: 8px;
         padding-bottom: 8px;
+        gap: 8px;
     }
-    .admin-folder-row { flex-wrap: wrap; }
-    .admin-folder-row .afr-actions { width: 100%; justify-content: flex-end; }
-    .admin-toolbar h1 { font-size: 22px; }
-    .order-modal .modal-content { padding: 24px 18px; }
-    .admin-tabs { flex-wrap: wrap; }
+    .photos-toolbar .toolbar-left { gap: 8px; flex-wrap: wrap; }
+    .photos-toolbar .toolbar-left h2 { font-size: 17px !important; }
+    .photos-toolbar .toolbar-right {
+        width: 100%;
+        display: flex;
+        gap: 6px;
+    }
+    .photos-toolbar .toolbar-right .btn-ghost {
+        flex: 1;
+        text-align: center;
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px !important;
+        padding: 8px 10px !important;
+    }
+
+    /* ── Photo Grid ── */
+    .photo-grid-t { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .photo-card-t { border-radius: 10px; }
+    .photo-btn-t { width: 28px; height: 28px; }
+    .photo-check { width: 22px; height: 22px; }
+
+    /* ── Folder Grid ── */
+    .folder-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .folder-header h1 { font-size: 22px; }
+    .folder-header p { font-size: 13px; }
+    .folder-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .child-folder { padding: 20px 12px 14px; }
+    .child-folder .folder-emoji { font-size: 32px; margin-bottom: 8px; }
+    .child-folder .folder-name { font-size: 13px; }
+    .child-folder .folder-count { font-size: 11px; }
+
+    /* ── Child PIN Modal ── */
+    .child-pin-card { padding: 28px 20px; }
+    .child-pin-card h3 { font-size: 18px; }
+    .child-pin-card input {
+        font-size: 24px; letter-spacing: 10px;
+        min-height: 48px;
+    }
+
+    /* ── Admin Panel ── */
+    .admin-toolbar { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .admin-toolbar h1 { font-size: 20px; }
+    .admin-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .admin-tabs::-webkit-scrollbar { display: none; }
+    .admin-tab {
+        flex: 0 0 auto;
+        padding: 8px 14px;
+        font-size: 12px;
+        min-height: 38px;
+    }
+    .admin-section { padding: 16px; }
+    .admin-section h3 { font-size: 16px; }
+    .admin-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+    .admin-row label { min-width: unset; font-size: 13px; }
+    .admin-input { width: 100%; font-size: 14px; min-height: 40px; }
+    .admin-folder-row {
+        flex-wrap: wrap;
+        padding: 14px;
+        gap: 10px;
+    }
+    .admin-folder-row .afr-icon { font-size: 24px; }
+    .admin-folder-row .afr-name { font-size: 14px; }
+    .admin-folder-row .afr-actions {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 6px;
+    }
+    .admin-folder-row .afr-btn {
+        min-height: 36px;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    /* ── Price Editor (Admin) ── */
+    .price-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 10px 0;
+    }
+    .price-row span { font-size: 13px; }
+    .price-input { width: 100%; min-height: 40px; }
+
+    /* ── Order Cards (Admin) ── */
+    .order-card { padding: 14px; }
+    .order-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .order-header strong { font-size: 14px; }
+    .order-body { font-size: 12px; gap: 8px; }
+    .order-footer { flex-direction: column; gap: 8px; align-items: flex-start; }
+    .order-status-select { min-height: 36px; width: 100%; }
+
+    /* ── Settings (Admin) ── */
+    .setting-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px 0;
+    }
+    .setting-row p { font-size: 13px; }
+
+    /* ── Order Modal ── */
+    .order-modal .modal-content { padding: 20px 16px; }
+    .order-modal h3 { font-size: 18px; }
+    .order-modal .order-summary { font-size: 12px; padding: 12px; }
+
+    /* ── Rename Modal ── */
+    .rename-card { padding: 24px 18px; max-width: 100%; }
+    .rename-card h3 { font-size: 18px; }
+    .rename-card input { min-height: 44px; font-size: 15px; }
+    .rename-actions { gap: 8px; }
+    .rename-actions .btn-ghost,
+    .rename-actions .btn-action {
+        min-height: 40px;
+        padding: 8px 16px !important;
+    }
+
+    /* ── Download Overlay ── */
+    .dl-box { padding: 28px 20px; }
+    .dl-box h3 { font-size: 18px; }
+
+    /* ── Action Bar (seçili foto bar) ── */
+    .action-bar {
+        width: 92%; padding: 12px 16px;
+        bottom: 16px; gap: 12px;
+        border-radius: 16px;
+    }
+    .action-info { font-size: 13px; }
+    .action-info span { font-size: 16px; }
+
+    /* ── Toast ── */
+    .toast-container { top: 80px; right: 12px; left: 12px; }
+    .toast { max-width: 100%; font-size: 13px; padding: 10px 16px; }
+
+    /* ── Buttons — touch-friendly minimums ── */
+    .btn-back,
+    .btn-action {
+        min-height: 40px;
+        font-size: 13px;
+    }
 }
 
+/* ── Extra small (≤ 480px) ── */
 @media(max-width: 480px) {
     .folder-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .child-folder .folder-emoji { font-size: 30px; }
-    .child-folder .folder-name { font-size: 13px; }
-    .photo-grid-t { grid-template-columns: repeat(2, 1fr); }
+    .child-folder .folder-emoji { font-size: 28px; }
+    .child-folder .folder-name { font-size: 12px; }
+    .photo-grid-t { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .photo-card-t { border-radius: 8px; }
+    .auth-box { padding: 24px 14px; }
+    .role-selector { flex-direction: column; }
+    .role-card {
+        flex-direction: row;
+        gap: 12px;
+        text-align: left;
+        min-height: 56px;
+    }
+    .role-card .role-icon { font-size: 28px; }
+    .admin-section { padding: 12px; }
 }
 
 /* ═══════════ ADMIN TABS ═══════════ */
