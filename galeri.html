@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dijital Teslimat | Kindergarten Photo Studio</title>
+    <title>Müşteri Galerisi | Kindergarten Photo Studio</title>
     <meta name="robots" content="noindex, nofollow">
     <meta name="theme-color" content="#fcfaf5">
-    <link rel="manifest" href="manifest.json">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,17 +15,17 @@
     <!-- GLightbox CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
 
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="teslimat.css">
     <link rel="stylesheet" href="shop.css">
 </head>
 <body>
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR (Reused) -->
     <nav id="nav">
         <div class="container nav-container">
             <a href="index.html" class="logo">
-                <img src="assets/logo.webp" style="height:80px; margin-right:8px;" alt="Logo">
+                <img src="assets/logo.webp" style="height:80px; margin-right:8px;" alt="Logo"> 
             </a>
             <div class="nav-links">
                 <a href="index.html#about">Hakkımızda</a>
@@ -44,62 +43,52 @@
         <a href="index.html#about" class="mob-link">Hakkımızda</a>
         <a href="index.html#products" class="mob-link">Baskı Hizmetleri</a>
         <a href="teslimat.html" class="mob-link" style="color:var(--bento-red);">Dijital Teslimat</a>
-        <a href="index.html#contact" class="btn-main mob-link" style="text-align:center;">İletişim</a>
+        <a href="index.html#contact" class="btn-main mob-link" style="text-align: center;">İletişim</a>
     </div>
 
-    <!-- ═══════════ AUTH GATE ═══════════ -->
-    <div id="teslimatAuth" class="teslimat-auth">
-        <div class="auth-box">
-            <h2 id="authSchoolName">Dijital Teslimat</h2>
-            <p class="auth-subtitle">Fotoğraflara erişmek için giriş yapın.</p>
-
-            <!-- Role Selector -->
-            <div class="role-selector">
-                <div class="role-card active" data-role="veli">
-                    <span class="role-icon">👨‍👩‍👧</span>
-                    <span class="role-label">Veli Girişi</span>
-                    <span class="role-desc">Çocuğunuzun fotoğrafları</span>
-                </div>
-                <div class="role-card" data-role="admin">
-                    <span class="role-icon">🛡️</span>
-                    <span class="role-label">Admin Girişi</span>
-                    <span class="role-desc">Yönetim paneli</span>
-                </div>
-            </div>
-
-            <!-- Auth Form -->
-            <div class="auth-form">
-                <input type="password" id="authPinInput" class="auth-input" maxlength="4" placeholder="••••" autocomplete="off">
-                <input type="password" id="authPassInput" class="auth-input password-input" placeholder="Admin şifresi" autocomplete="off" style="display:none;">
-                <div id="authError" class="auth-error">Hatalı bilgi</div>
-                <button id="authSubmitBtn" class="btn-main" style="width:100%;font-size:16px;padding:15px;">Giriş Yap</button>
-            </div>
+    <!-- PIN GATE -->
+    <div id="pinGate" class="pin-gate">
+        <div class="pin-box">
+            <h2 id="schoolNameTitle">Galeriye Giriş</h2>
+            <p>Lütfen okulunuz tarafından sağlanan 4 haneli PIN kodunu giriniz.</p>
+            <input type="password" id="pinInput" maxlength="4" placeholder="••••" autocomplete="off">
+            <button id="pinSubmitBtn" class="btn-main">Giriş Yap</button>
+            <div id="pinError" class="pin-error">Hatalı PIN, lütfen tekrar deneyin.</div>
         </div>
     </div>
 
-    <!-- ═══════════ MAIN CONTENT ═══════════ -->
-    <main id="teslimatMain" class="teslimat-main hidden">
-        <div class="container">
+    <!-- MAIN GALLERY -->
+    <main id="galleryMain" class="gallery-main hidden">
+        <section class="section" style="padding-top: 150px;">
+            <div class="container">
+                <div class="gallery-header">
+                    <div>
+                        <h1 id="galleryTitle">Okul Galerisi</h1>
+                        <p id="gallerySubtitle">0 fotoğraf yükleniyor...</p>
+                    </div>
+                    <div class="gallery-actions" style="display: flex; gap: 10px; align-items: center;">
+                        <div class="view-toggles" style="display: flex; gap: 5px; background: #eaeaea; padding: 3px; border-radius: var(--radius-sm);">
+                            <button id="viewGridBtn" class="btn-icon active" title="Küçük Grid" style="padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                            </button>
+                            <button id="viewLargeBtn" class="btn-icon" title="Büyük Liste" style="padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; background: transparent;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect></svg>
+                            </button>
+                        </div>
+                        <button id="selectAllBtn" class="btn-ghost">Tümünü Seç</button>
+                    </div>
+                </div>
 
-            <!-- Breadcrumb -->
-            <div class="teslimat-breadcrumb" id="breadcrumb"></div>
-
-            <!-- ── PHOTO VIEW ── -->
-            <div id="photoViewPanel" class="view-panel">
-                <div class="photos-toolbar" id="photosToolbar"></div>
-                <div class="photo-grid-t" id="photoGridT">
-                    <!-- Photos injected by JS -->
+                <!-- Gallery Grid -->
+                <div id="galleryGrid" class="gallery-grid">
+                    <!-- Cards will be injected by JS -->
+                </div>
+                
+                <div id="loadingSpinner" class="loading-spinner">
+                    <div class="spinner"></div>
                 </div>
             </div>
-
-            <!-- ── ADMIN VIEW ── -->
-            <div id="adminViewPanel" class="view-panel">
-                <div id="adminContent">
-                    <!-- Admin panel injected by JS -->
-                </div>
-            </div>
-
-        </div>
+        </section>
     </main>
 
     <!-- BOTTOM ACTION BAR (Bulk actions) -->
@@ -112,6 +101,19 @@
         </div>
     </div>
     
+    <!-- DOWNLOAD PROGRESS OVERLAY -->
+    <div id="downloadOverlay" class="download-overlay hidden">
+        <div class="download-box">
+            <h3>Fotoğraflar İndiriliyor</h3>
+            <p>Lütfen bekleyin, <span id="downloadStatus">0/0</span></p>
+            <div class="progress-bar-container">
+                <div id="downloadProgressBar" class="progress-bar-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GLightbox will inject its DOM here. Product bar will be injected dynamically -->
+
     <!-- CART FAB -->
     <button id="cartFab" class="cart-fab" aria-label="Sepet">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
@@ -170,65 +172,26 @@
             </form>
         </div>
     </div>
-
-    <!-- ═══════════ PASSWORD CHANGE MODALS ═══════════ -->
-    <!-- ═══════════ PASSWORD CHANGE MODALS ═══════════ -->
-    <div id="generalPinOverlay" class="rename-overlay hidden">
-        <div class="rename-card" style="width:360px;">
-            <h3>Genel Şifreleri Düzenle</h3>
-            <p style="color:var(--text-light);font-size:14px;margin-bottom:20px;">Veli ve Admin giriş şifrelerini değiştirin.</p>
-            
-            <div style="margin-bottom:15px;text-align:left;">
-                <label style="display:block;margin-bottom:5px;font-weight:600;font-size:14px;">Yeni Veli Şifresi (PIN)</label>
-                <input type="text" id="newVeliPinInput" style="letter-spacing:normal;font-size:16px;width:100%;padding:10px;border:1px solid var(--border-color);border-radius:var(--radius-sm);" placeholder="Örn: 1234">
+    
+    <!-- SUCCESS MODAL -->
+    <div id="successModal" class="checkout-modal hidden">
+        <div class="modal-content" style="text-align: center; padding: 40px 20px;">
+            <div style="color: var(--bento-green); margin-bottom: 20px;">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             </div>
-            
-            <div style="margin-bottom:25px;text-align:left;">
-                <label style="display:block;margin-bottom:5px;font-weight:600;font-size:14px;">Yeni Admin Şifresi</label>
-                <input type="text" id="newAdminPinInput" style="letter-spacing:normal;font-size:16px;width:100%;padding:10px;border:1px solid var(--border-color);border-radius:var(--radius-sm);" placeholder="Örn: admin2026">
-            </div>
-
-            <div class="rename-actions">
-                <button id="generalPinCancelBtn" class="btn-ghost" style="font-size:13px;padding:8px 18px;">İptal</button>
-                <button id="generalPinSaveBtn" class="btn-action" style="font-size:13px;">Kaydet</button>
-            </div>
+            <h3 style="margin-bottom: 15px;">Siparişiniz Alındı!</h3>
+            <p style="color: var(--text-light); margin-bottom: 20px;">Bizi tercih ettiğiniz için teşekkür ederiz. Sipariş detaylarınız bize ulaştı, en kısa sürede sizinle iletişime geçeceğiz.</p>
+            <button id="closeSuccessBtn" class="btn-main">Galerive Dön</button>
         </div>
     </div>
 
-
-    <!-- ═══════════ DOWNLOAD OVERLAY ═══════════ -->
-    <div id="dlOverlay" class="dl-overlay hidden">
-        <div class="dl-box">
-            <h3>Fotoğraflar İndiriliyor</h3>
-            <p>Lütfen bekleyin, <span id="dlStatus">0/0</span></p>
-            <div class="dl-progress-container">
-                <div id="dlProgressFill" class="dl-progress-fill"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ═══════════ SUCCESS MODAL ═══════════ -->
-    <div id="successOverlay" class="success-overlay hidden">
-        <div class="modal-content" style="text-align:center;padding:40px 20px;max-width:420px;background:#fff;border-radius:var(--radius-lg);">
-            <div style="color:var(--bento-green);margin-bottom:20px;">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            </div>
-            <h3 style="margin-bottom:15px;">Siparişiniz Alındı!</h3>
-            <p style="color:var(--text-light);margin-bottom:20px;">Bizi tercih ettiğiniz için teşekkür ederiz. En kısa sürede sizinle iletişime geçeceğiz.</p>
-            <button id="successCloseBtn" class="btn-main">Galeriye Dön</button>
-        </div>
-    </div>
-
-    <!-- ═══════════ TOAST CONTAINER ═══════════ -->
-    <div id="toastContainer" class="toast-container"></div>
-
-    <!-- FOOTER -->
-    <footer class="footer" style="margin-top:60px;">
+    <!-- FOOTER (Reused) -->
+    <footer class="footer" style="margin-top: 60px;">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="logo" style="color:#fff;margin-bottom:16px;">
-                        <img src="assets/logo.webp" style="height:80px;margin-right:8px;" alt="Logo"> Kindergarten Photo Studio
+                    <div class="logo" style="color:#fff; margin-bottom:16px;">
+                        <img src="assets/logo.webp" style="height:80px; margin-right:8px;" alt="Logo"> Kindergarten Photo Studio
                     </div>
                     <p>Minik gülümsemeleri ölümsüzleştiriyoruz. İstanbul'un en güvenilir kreş ve anaokulu fotoğraf stüdyosu.</p>
                 </div>
@@ -250,10 +213,10 @@
     <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    <script src="teslimat.js"></script>
-
+    <script src="shop.js"></script>
+    
     <script>
-        // Mobile menu handler
+        // Minimal mobile menu handler
         document.getElementById('hamBtn').addEventListener('click', () => {
             document.getElementById('mobMenu').classList.add('open');
             document.getElementById('mobOverlay').classList.add('open');
@@ -266,12 +229,6 @@
             document.getElementById('mobMenu').classList.remove('open');
             document.getElementById('mobOverlay').classList.remove('open');
         });
-    </script>
-    <script>
-        // PWA Service Worker
-        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-            navigator.serviceWorker.register('sw-teslimat.js').catch(e => console.log('SW:', e));
-        }
     </script>
 </body>
 </html>

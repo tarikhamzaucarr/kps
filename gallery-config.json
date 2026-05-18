@@ -1,0 +1,19 @@
+{
+  "schools": [
+    {
+      "slug": "demo-okul",
+      "name": "Demo Anaokulu",
+      "pin": "1234",
+      "photoCount": 6,
+      "basePath": "demo-okul/",
+      "photos": [
+        { "id": "IMG_001", "thumb": "thumbs/TRK04859.webp", "original": "originals/TRK04859.webp" },
+        { "id": "IMG_002", "thumb": "thumbs/TRK08389.webp", "original": "originals/TRK08389.webp" },
+        { "id": "IMG_003", "thumb": "thumbs/TRK08551.webp", "original": "originals/TRK08551.webp" },
+        { "id": "IMG_004", "thumb": "thumbs/galeri_01.webp", "original": "originals/galeri_01.webp" },
+        { "id": "IMG_005", "thumb": "thumbs/galeri_02.webp", "original": "originals/galeri_02.webp" },
+        { "id": "IMG_006", "thumb": "thumbs/galeri_03.webp", "original": "originals/galeri_03.webp" }
+      ]
+    }
+  ]
+}

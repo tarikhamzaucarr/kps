@@ -1,0 +1,15 @@
+.vercel
+.env*.local
+.env
+.DS_Store
+node_modules/
+*.db
+brisa_scraper/
+muhasebe-otomasyon/
+tecdoc-arama/
+check-please/
+scraper/
+websitesi/
+*.xlsx
+*.csv
+assets/photos/

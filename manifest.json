@@ -1,0 +1,14 @@
+{
+  "name": "Kindergarten Photo Studio — Dijital Teslimat",
+  "short_name": "KPS Teslimat",
+  "description": "Anaokulu fotoğraflarınıza dijital erişim ve sipariş sistemi",
+  "start_url": "/teslimat.html",
+  "display": "standalone",
+  "background_color": "#fcfaf5",
+  "theme_color": "#fcfaf5",
+  "orientation": "any",
+  "icons": [
+    { "src": "assets/logo.webp", "sizes": "192x192", "type": "image/webp" },
+    { "src": "assets/logo.webp", "sizes": "512x512", "type": "image/webp" }
+  ]
+}

@@ -112,24 +112,16 @@ def upload_to_r2(client, bucket, local_path, r2_key):
 # THUMBNAIL OLUŞTURMA (macOS sips)
 # ══════════════════════════════════════════════
 def create_thumbnail(src_path, thumb_path, width=THUMB_WIDTH):
-    """macOS sips ile thumbnail oluştur"""
+    """macOS sips ile thumbnail oluştur (Daima JPEG çıktı verir)"""
     thumb_path.parent.mkdir(parents=True, exist_ok=True)
-
-    if src_path.suffix.lower() in {'.heic', '.tiff', '.bmp'}:
-        temp = thumb_path.with_suffix('.jpg')
-        subprocess.run(["sips", "-s", "format", "jpeg", str(src_path), "--out", str(temp)],
-                       capture_output=True)
-        subprocess.run(["sips", "--resampleWidth", str(width), str(temp), "--out", str(temp)],
-                       capture_output=True)
-        if shutil.which("cwebp"):
-            subprocess.run(["cwebp", "-q", "80", str(temp), "-o", str(thumb_path)],
-                           capture_output=True)
-        else:
-            shutil.copy2(temp, thumb_path)
-        temp.unlink(missing_ok=True)
-    else:
-        subprocess.run(["sips", "--resampleWidth", str(width), str(src_path), "--out", str(thumb_path)],
-                       capture_output=True)
+    subprocess.run([
+        "sips", 
+        "-s", "format", "jpeg", 
+        "--setProperty", "formatOptions", "80", 
+        "--resampleWidth", str(width), 
+        str(src_path), 
+        "--out", str(thumb_path)
+    ], capture_output=True)
 
 
 def copy_to_originals(src_path, orig_path):
@@ -155,7 +147,7 @@ def scan_school(school_dir, use_r2=False, r2_client=None, r2_bucket=None):
 
     for pidx, photo_file in enumerate(photo_files, 1):
         photo_id = f"IMG_{pidx:04d}"
-        thumb_name = f"{photo_file.stem}.webp"
+        thumb_name = f"{photo_file.stem}.jpg"
         orig_name = photo_file.name
 
         orig_dest = school_dir / "originals" / orig_name
