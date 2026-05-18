@@ -617,16 +617,17 @@
             
             // Add a custom download button to the lightbox toolbar safely
             const injectDownloadBtn = () => {
-                const toolbar = document.querySelector('.gtoolbar');
-                if (toolbar && !document.getElementById('gCustomDownloadBtn')) {
+                const toolbar = document.querySelector('.glightbox-window') || document.body;
+                if (!document.getElementById('gCustomDownloadBtn')) {
                     const dlBtn = document.createElement('button');
                     dlBtn.id = 'gCustomDownloadBtn';
-                    dlBtn.className = 'gbtn';
-                    dlBtn.title = 'İndir';
-                    dlBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`;
+                    // Maksimum görünürlük için özel CSS
+                    dlBtn.style.cssText = 'position:fixed; top:20px; right:80px; z-index:9999999; background:var(--bento-blue); color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:bold; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3); display:flex; align-items:center; gap:8px; font-size:14px;';
+                    dlBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> İndir`;
                     dlBtn.onclick = async () => {
                         if(!activeLightboxPhotoUrl) return;
                         const filename = activeLightboxPhotoUrl.split('/').pop() || 'fotograf.jpg';
+                        dlBtn.innerHTML = 'İniyor...';
                         try {
                             const response = await fetch(activeLightboxPhotoUrl);
                             if(!response.ok) throw new Error("CORS or Network Error");
@@ -634,13 +635,18 @@
                             const a = document.createElement('a');
                             a.href = URL.createObjectURL(blob);
                             a.download = filename;
+                            document.body.appendChild(a);
                             a.click();
+                            document.body.removeChild(a);
                             URL.revokeObjectURL(a.href);
                         } catch(e) {
-                            alert("Tarayıcınız güvenlik (CORS) nedeniyle indirmeyi engelledi. Lütfen Cloudflare R2 CORS ayarlarını kontrol edin.");
+                            alert("Tarayıcınız güvenlik (CORS) nedeniyle indirmeyi engelledi. Lütfen R2 CORS ayarlarını yapın.");
                         }
+                        dlBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> İndir`;
                     };
-                    toolbar.insertBefore(dlBtn, toolbar.firstChild);
+                    toolbar.appendChild(dlBtn);
+                } else {
+                    document.getElementById('gCustomDownloadBtn').style.display = 'flex';
                 }
             };
 
@@ -657,6 +663,11 @@
                 activeLightboxThumbUrl = slide.thumbUrl;
                 ProductBar.updateMockups(activeLightboxThumbUrl);
                 injectDownloadBtn(); // Ensure button stays there
+            });
+            
+            gLightboxInstance.on('close', () => {
+                const btn = document.getElementById('gCustomDownloadBtn');
+                if (btn) btn.style.display = 'none';
             });
             
             gLightboxInstance.on('close', () => {
@@ -870,8 +881,13 @@
                         status.textContent = 'ZIP oluşturuluyor...';
                         const zipBlob = await zip.generateAsync({ type: 'blob' });
                         saveAs(zipBlob, `${currentSchool.name.replace(/\s+/g, '_')}_fotograflar.zip`);
+                        status.textContent = 'Tamamlandı!';
+                        bar.style.width = '100%';
                     } else {
                         alert("Tarayıcınız güvenlik (CORS) nedeniyle toplu ZIP oluşturmayı engelledi. Cloudflare R2 CORS ayarlarınızı yaptığınızdan emin olun veya fotoğrafları tek tek indirin.");
+                        status.textContent = 'Hata!';
+                        overlay.classList.add('hidden');
+                        return;
                     }
                 }
                 showToast('İndirme tamamlandı ✓', 'success');
