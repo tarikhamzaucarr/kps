@@ -460,5 +460,36 @@ body.select-mode-active .photo-btn-t {
 .setting-row:last-of-type{border-bottom:none;}
 .setting-row p{margin:0;}
 
-.photo-card-t img{opacity:0;transition:filter 0.5s ease,opacity 0.5s ease;}
-.photo-card-t.loaded img{opacity:1;filter:blur(0);transform:scale(1);}
+/* ── Lazy Load + Infinite Scroll Image Transitions ── */
+.photo-card-t img{opacity:0;transition:opacity 0.4s ease;}
+.photo-card-t.loaded img{opacity:1;}
+
+/* Error fallback: if image fails, show a placeholder icon */
+.photo-card-t.load-error {
+    background: #f0f0f4;
+    animation: none;
+    display: flex; align-items: center; justify-content: center;
+}
+.photo-card-t.load-error::after {
+    content: '📷';
+    font-size: 32px;
+    opacity: 0.3;
+    position: absolute;
+    z-index: 0;
+}
+
+/* ── Infinite Scroll Sentinel ── */
+.scroll-sentinel {
+    display: flex; justify-content: center; align-items: center;
+    padding: 40px 0;
+    grid-column: 1 / -1;
+}
+.scroll-sentinel-spinner {
+    width: 32px; height: 32px;
+    border: 3px solid #eaeaea;
+    border-top-color: var(--bento-red, #f75c4c);
+    border-radius: 50%;
+    animation: sentinelSpin 0.8s linear infinite;
+}
+@keyframes sentinelSpin { to { transform: rotate(360deg); } }
+

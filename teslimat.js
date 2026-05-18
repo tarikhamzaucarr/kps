@@ -4284,36 +4284,93 @@
             }
         },
 
+        // ── Infinite Scroll + Lazy Loading State ──
+        _renderedCount: 0,
+        _BATCH_SIZE: 30,
+        _scrollObserver: null,
+        _imageObserver: null,
+
         renderPhotos() {
             const grid = document.getElementById('photoGridT');
-            let html = '';
-            currentSchool.photos.forEach(photo => {
+            grid.innerHTML = '';
+            this._renderedCount = 0;
+
+            // Destroy previous observers
+            if (this._scrollObserver) { this._scrollObserver.disconnect(); this._scrollObserver = null; }
+            if (this._imageObserver) { this._imageObserver.disconnect(); this._imageObserver = null; }
+
+            // ── Image Lazy Load Observer ──
+            // Only loads images when they enter viewport (replaces native loading="lazy" which fails on some mobile browsers)
+            this._imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        const realSrc = img.dataset.src;
+                        if (realSrc) {
+                            img.src = realSrc;
+                            img.removeAttribute('data-src');
+                        }
+                        this._imageObserver.unobserve(img);
+                    }
+                });
+            }, { rootMargin: '300px 0px' }); // Start loading 300px before visible
+
+            // Render first batch
+            this._renderBatch(grid);
+
+            // ── Scroll Sentinel Observer (infinite scroll) ──
+            this._setupScrollSentinel(grid);
+        },
+
+        _renderBatch(grid) {
+            const photos = currentSchool.photos;
+            const start = this._renderedCount;
+            const end = Math.min(start + this._BATCH_SIZE, photos.length);
+
+            if (start >= photos.length) return false; // Nothing more to render
+
+            const fragment = document.createDocumentFragment();
+
+            for (let i = start; i < end; i++) {
+                const photo = photos[i];
                 const thumbUrl = PHOTO_BASE_URL + currentSchool.basePath + photo.thumb;
-                html += `
-                    <div class="photo-card-t ${selectedPhotos.has(photo.id) ? 'selected' : ''}" data-photo-id="${photo.id}">
-                        <img src="${thumbUrl}" loading="lazy" alt="Fotoğraf">
-                        <div class="photo-overlay-t">
-                            <div class="photo-check"></div>
-                            <div class="photo-actions-t">
-                                <button class="photo-btn-t btn-view-photo" title="Büyüt">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            grid.innerHTML = html;
 
-            // Click handlers + image load
-            grid.querySelectorAll('.photo-card-t').forEach(card => {
-                // Shimmer → loaded transition
-                const img = card.querySelector('img');
-                if (img) {
-                    img.addEventListener('load', () => card.classList.add('loaded'));
-                    if (img.complete) card.classList.add('loaded');
-                }
+                const card = document.createElement('div');
+                card.className = 'photo-card-t' + (selectedPhotos.has(photo.id) ? ' selected' : '');
+                card.dataset.photoId = photo.id;
 
+                const img = document.createElement('img');
+                img.alt = 'Fotoğraf';
+                img.dataset.src = thumbUrl; // Lazy: don't set src yet
+
+                // Image load → reveal with transition
+                img.addEventListener('load', () => card.classList.add('loaded'));
+                // Error fallback → still show the card (prevents invisible photos on mobile)
+                img.addEventListener('error', () => {
+                    card.classList.add('loaded', 'load-error');
+                    // Retry once after 2 seconds
+                    setTimeout(() => {
+                        if (card.classList.contains('load-error')) {
+                            img.src = thumbUrl;
+                        }
+                    }, 2000);
+                });
+
+                card.appendChild(img);
+
+                // Overlay
+                const overlay = document.createElement('div');
+                overlay.className = 'photo-overlay-t';
+                overlay.innerHTML = `
+                    <div class="photo-check"></div>
+                    <div class="photo-actions-t">
+                        <button class="photo-btn-t btn-view-photo" title="Büyüt">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>`;
+                card.appendChild(overlay);
+
+                // Click handlers
                 card.addEventListener('click', (e) => {
                     if (e.target.closest('.btn-view-photo')) return;
                     const pid = card.dataset.photoId;
@@ -4335,7 +4392,42 @@
                     e.stopPropagation();
                     this.openLightbox(card.dataset.photoId);
                 });
-            });
+
+                // Register image for lazy loading
+                this._imageObserver.observe(img);
+
+                fragment.appendChild(card);
+            }
+
+            grid.appendChild(fragment);
+            this._renderedCount = end;
+            return end < photos.length; // true = more photos remain
+        },
+
+        _setupScrollSentinel(grid) {
+            // Remove old sentinel if exists
+            const oldSentinel = document.getElementById('photoScrollSentinel');
+            if (oldSentinel) oldSentinel.remove();
+
+            if (this._renderedCount >= currentSchool.photos.length) return; // All rendered
+
+            const sentinel = document.createElement('div');
+            sentinel.id = 'photoScrollSentinel';
+            sentinel.className = 'scroll-sentinel';
+            sentinel.innerHTML = '<div class="scroll-sentinel-spinner"></div>';
+            grid.parentNode.insertBefore(sentinel, grid.nextSibling);
+
+            this._scrollObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    const hasMore = this._renderBatch(grid);
+                    if (!hasMore) {
+                        sentinel.remove();
+                        this._scrollObserver.disconnect();
+                    }
+                }
+            }, { rootMargin: '600px 0px' }); // Preload next batch 600px ahead
+
+            this._scrollObserver.observe(sentinel);
         },
 
         updateButtons() {
